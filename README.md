@@ -1,2 +1,1 @@
-"# academy" 
-"# academy" 
+Academy project for learning purposes.
