@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>   
+<link>  
+<meta name="viewport" content="width=device-width, initial-scale=1">  
+<title> <%= title %> </title>  
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>    
+<body>    
+    <h1> My Login Form <%= new Date %> </h1>
+    <form action="principal.ejs" method="POST">  
+        <div class="container">   
+            <label>Username : </label>   
+            <input type="text" placeholder="Enter Username" name="username" required>  
+            <label>Password : </label>   
+            <input type="password" placeholder="Enter Password" name="password" required>  
+            <button type="submit">Login</button>   
+            <input type="checkbox" checked="checked"> Remember me   
+            <button type="button" class="cancelbtn"> Cancel</button>   
+            Forgot <a href="#"> password? </a>   
+        </div>   
+    </form>
+    
+    <a href="/contact">Contact</a>
+</body>     
+</html>  
