@@ -20,7 +20,7 @@ router.get("/gedeones", (req, res) => {
 
 router.get("/ini", (req, res) => {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("pral.ejs", {title: 'Bienvenido a consulta de Gedeones!'});
+    res.render("pral.html", {title: 'Bienvenido!'});
 });
 
 module.exports = router;//exportamos el alias router

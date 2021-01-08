@@ -14,7 +14,7 @@ app.listen(app.get("port"), (req, res) => {
 });
 
 
-console.log("Server starting...");
+console.log("Server starting ...");
 
 // routes
 app.use(require('./routes/router'));
