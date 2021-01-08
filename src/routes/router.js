@@ -5,7 +5,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
     console.log("Server attends at HTTP-METHOD = GET");
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("login.html", {title: 'Bienvenido a login'});
+    res.render("pral.html", {title: 'Bienvenido a login'});
 });
 
 router.get("/contact", (req, res) => {
@@ -15,12 +15,8 @@ router.get("/contact", (req, res) => {
 
 router.get("/gedeones", (req, res) => {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("gedeones.html", {title: 'Bienvenido a consulta de Gedeones!'});
+    res.render("gedeones.html", {title: 'Bienvenido a consulta de Gedeones!!'});
 });
 
-router.get("/ini", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("pral.html", {title: 'Bienvenido!'});
-});
 
 module.exports = router;//exportamos el alias router
