@@ -1,7 +1,13 @@
+
+
+<script>
+  alert('valor recibido de entrada menu:' + entry)
+</script>
+
 <div id="menuSup">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-       <span class="navbar-brand mb-0 h1"><%= title %></span>
+       <span class="navbar-brand mb-0 h1">Mi laboratorio site</span>
        <button
          class="navbar-toggler"
          type="button"
@@ -15,18 +21,47 @@
        </button>
        <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <ul class="navbar-nav me-auto mb-lg-0">
-           <li class="nav-item">
-             <a class="nav-link active" aria-current="page" href="/"><i class="fas fa-home"></i>&nbsp;Home</a>
+           <li class="nav-item">   
+               <%if (entry == 1) {%>
+                 <a class="nav-link active" href="/">
+               <%}else{%>
+                 <a class="nav-link" href="/">
+               <%}%>
+               <i class="fas fa-home"></i>&nbsp;Home</a>
+             </script>
            </li>
            <li class="nav-item">
-             <a class="nav-link" href="/about"><i class="far fa-building"></i>&nbsp;About</a>
+            <%if (entry == 2) {%>
+              <a class="nav-link active" href="/about">
+            <%}else{%>
+              <a class="nav-link" href="/about">
+            <%}%>
+             <i class="far fa-building"></i>&nbsp;About</a>
            </li>
            <li class="nav-item">
-             <a class="nav-link" href="/contact"><i class="far fa-envelope"></i>&nbsp;Contact</a>
+            <%if (entry == 3) {%>
+              <a class="nav-link active" href="/contact">
+            <%}else{%>
+              <a class="nav-link" href="/contact">
+            <%}%>
+             <i class="far fa-envelope"></i>&nbsp;Contact</a>
            </li>
            <li class="nav-item">
-             <a class="nav-link" href="/reportingCUBO"><i class="fas fa-cog"></i>&nbsp;CUBO Reporting</a>
+              <%if (entry == 4) {%>
+                <a class="nav-link active" href="/reportingCUBO">
+              <%}else{%>
+                <a class="nav-link" href="/reportingCUBO">
+              <%}%>
+              <i class="fas fa-cog"></i>&nbsp;CUBO Reporting</a>
            </li>
+           <li class="nav-item">
+              <%if (entry == 5) {%>
+                <a class="nav-link active" href="/investmentResearch">
+              <%}else{%>
+                <a class="nav-link" href="/investmentResearch">
+              <%}%>
+              <i class="fas fa-satellite-dish"></i>&nbsp;Investment world research</a>
+          </li>
            
            <li class="nav-item dropdown">
              <a

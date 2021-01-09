@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>   
+ 
+<%- include ('partials/head.html') %>
+  
+<body>
+    <%- include ('partials/navigation.html') %>
+    
+    <h3> Reporting CUBO: generar contenido para informe bimensual de su proyecto</h3>
+    <br/>
+    <h4><%= title %></h4>
+    <script>
+        alert('elemento submitido: ' + document.forms[0].plainTxtGedeones.value);
+        //alert('entry al pinchar reportingCUBO es: ' + '<%=entry%>');
+    </script>
+
+  <form>
+    <div class="mb-3">
+      <!--label for="plainTxtGedeones" class="form-label">Ruta fichero</!--label>
+      <input type="text" class="form-control" id="plainTxtGedeones" aria-describedby="fileHelp">
+      <div id="fileHelp" class="form-text">Introduzca la ruta del fichero txt del que generar el texto formateado</div>
+    </div>-->
+    <div class="mb-3">
+        <label for="plainTxtGedeones" class="form-label">Seleccione fichero</label>
+        <input class="form-control form-control-sm" id="plainTxtGedeones" type="file">
+    </div>
+    <!--<div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1">
+    </div>-->
+    <!--<div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>-->
+    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-3x"></i></button>
+  </form>
+
+  <%-include ('partials/footer.html'); %>
+
+</body>     
+</html>  
