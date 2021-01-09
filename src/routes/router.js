@@ -10,7 +10,6 @@ const router = express.Router();
 
 //vars
 var data = [];
-results = new StringBuffer();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
@@ -58,10 +57,8 @@ router.post('/genCUBO', (req, res) => {
     //console.log("router: num2 de mes: " + num2);
 
     asyncCall();
-
-    //console.log("leidos genReportCUBO: " + leidos);
-    //console.log("Leidos: " + n);
-    //console.log(results);
+    
+   
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.render("reportingCUBO.html", {title: 'Reporte bimensual Calidad Babel (CUBO) concluido', entry: 4});
@@ -70,15 +67,18 @@ router.post('/genCUBO', (req, res) => {
 
   async function asyncCall(){
     records=await genReportCUBO();
-    // HACER EL TRATAMIENTO DE LO RECIBIDO Y DEVOLVER LOS LEIDOS
-    var leidos = 0;
+
+    leidos = 0;
+    results = new StringBuffer(); 
+    // TODO: HACER EL TRATAMIENTO DE LO RECIBIDO PARA GENERAR UN STRING--> LUEOG VER COMO METERLO EN PANTALLA HTML
     for (let i = 0; i < records.length; i++) {
       //console.log(`record: ${records[i]}`);
-      //results.append(records[i]);
+      results.append(records[i]);
+      results.append("\n");
       leidos++;
     }//for
     console.log('leidos: ' + leidos);
-    //return leidos;
+    console.log(results.toString());
   }
 
   function genReportCUBO() {
@@ -92,10 +92,9 @@ router.post('/genCUBO', (req, res) => {
         i =0;
         rows.forEach(function (row, i) {
           i++;
-           data.push(`${i}->${row.fecha} - ${row.Proyecto} : ${row.Cod_GEDEON} - ${row.desc}`);
+          data.push(`${i}->${row.fecha} - ${row.Proyecto} : ${row.Cod_GEDEON} - ${row.desc}`);
         });
         resolve(data);
-        console.log(data);
       });//end of db.all
       
       db.close();
