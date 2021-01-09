@@ -25,6 +25,8 @@
     "morgan": "^1.10.0",
     "rxjs": "^6.6.3",
     "secure-convert-excel-to-json": "^1.7.0",
+    "sqlite3": "^5.0.1",
+    "stringbuffer": "^1.0.0",
     "tslib": "^2.0.3",
     "xlsx": "^0.16.9",
     "zone": "^0.3.4",

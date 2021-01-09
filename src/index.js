@@ -11,11 +11,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //server port definition
 app.listen(app.get("port"), (req, res) => {
-  console.log("...Server works, folk!! Listening at port " + app.get("port"));
+  console.log("...Server started, listening at port " + app.get("port"));
 });
-
-console.log("Server starting ...");
-
 
 // routes
 app.use(require('./routes/router'));
