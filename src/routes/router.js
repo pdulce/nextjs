@@ -45,7 +45,7 @@ router.get("/investmentResearch", (req, res) => {
 
 router.get("/gedeones", (req, res) => {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("gedeones.html", {title: 'Consulta de Gedeones', entry: 61});
+    res.render("gedeones.html", {title: 'Consulta de Gedeones', entry: 6});
 });
 
 router.post("/genCertMensualAT", async (req, res) => {
@@ -183,6 +183,8 @@ router.post("/caducanSoon", async (req, res) => {
 });
 
 router.post("/informePPTX", async (req, res) => {
+  //TODO: este informe toma hasta el día de hoy como fecha tope de búsqueda de trabajos, y desde una fecha concreta recibida como parámetro
+  // en el formulario. Esos datos se han de pasar a la query
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write("En construcción");
   res.write("\n");
