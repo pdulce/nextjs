@@ -10,58 +10,44 @@
     <!--SECTION ONE-->
     <section class="container-fluid" id="home">
         <div class="row bg-dark text-white p-5 text-center">
-            <div class="col-sm-5">
-                <h4> Generar informe bimensual Métrica CUBO (Babel)</h4>
+            <div class="col-sm-2">
+                <h5> Generar informe bimensual Métrica CUBO (Babel)</h5>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-1">
                 <form action="genCUBO" method="POST">
-                     <!--<div class="mb-3">
-                        <label for="mes1" class="form-label">Nombre mes inicial</label>
-                        <input class="form-control form-control-sm" name="mes1" id="mes1" type="text">
-                    </div>
-                    <div class="mb-3">
-                        <label for="mes2" class="form-label">Nombre mes final</label>
-                        <input class="form-control form-control-sm" name="mes2" id="mes2" type="text">
-                    </div>
-                   div class="mb-3">
-                        <label for="plainTxtGedeones" class="form-label">Seleccione fichero</label>
-                        <input class="form-control form-control-sm" name="fileCUBO" id="plainTxtGedeones" type="file">
-                    </!--div>-->
+                   <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                </form>
+            </div>
+
+            <div class="col-sm-2">
+                <h5> &nbsp;&nbsp;Generar Certificado Mensual UTE Actividades AT</h5>
+            </div>
+            <div class="col-sm-1">
+                <form action="genCertMensualAT" method="POST">
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
             </div>
-            <div class="row bg-dark text-white p-5 text-center">
-                <div class="col-sm-5">
-                    <h4> Generar Certificado Mensual UTE de Actividades del Proyecto</h4>
-                </div>
-                <div class="col-sm-5">
-                    <form action="genCertMensualAT" method="POST">
-                        <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
-                    </form>
-                </div>
+
+            <div class="col-sm-2">
+                <h5> &nbsp;&nbsp;Generar Informe de Peticiones que caducan en menos de una semana</h5>
             </div>
-            <div class="row bg-dark text-white p-5 text-center">
-                <div class="col-sm-5">
-                    <h4> Generar Informe de Peticiones que caducan en una semana (y ya caducados)</h4>
-                </div>
-                <div class="col-sm-5">
-                    <form action="#" method="POST">
-                        <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
-                    </form>
-                </div>
+            <div class="col-sm-1">
+                <form action="#" method="POST">
+                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                </form>
             </div>
-            <div class="row bg-dark text-white p-5 text-center">
-                <div class="col-sm-5">
-                    <h4> Generar Informe de Peticiones a presentar en PPTX de Seguimiento al CDISM</h4>
-                </div>
-                <div class="col-sm-5">
-                    <form action="#" method="POST">
-                        <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
-                    </form>
-                </div>
+
+            <div class="col-sm-2">
+                <h5> &nbsp;&nbsp;Generar Informe de Actividades realizadas para PPTX de Seguimiento</h5>
             </div>
- 
-    </section>
+            <div class="col-sm-1">
+                <form action="#" method="POST">
+                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                </form>
+            </div>
+
+        </div>
+   </section>
 
   <%-include ('partials/footer.html'); %>
 
