@@ -8,9 +8,6 @@ const sqlite3 = require("sqlite3").verbose();
 const databaseFile = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
 const router = express.Router();
 
-//vars
-var data = [];
-
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
@@ -48,40 +45,34 @@ router.get("/gedeones", (req, res) => {
     res.render("gedeones.html", {title: 'Consulta de Gedeones', entry: 61});
 });
 
-router.post('/genCUBO', (req, res) => {
+router.post('/genCUBO', async (req, res) => {
+
     console.log("Server attends at HTTP-METHOD = POST");
-    let num1=req.body.mes1;
+    /*let num1=req.body.mes1;
     let num2=req.body.mes2;
+    console.log("router: num1 de mes: " + num1);
+    console.log("router: num2 de mes: " + num2);*/
 
-    //console.log("router: num1 de mes: " + num1);
-    //console.log("router: num2 de mes: " + num2);
+    var data = [];
+    records=await genReportCUBO(data);
 
-    asyncCall();
-    
-   
-
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("reportingCUBO.html", {title: 'Reporte bimensual Calidad Babel (CUBO) concluido', entry: 4});
-  
-  });
-
-  async function asyncCall(){
-    records=await genReportCUBO();
-
-    leidos = 0;
     results = new StringBuffer(); 
     // TODO: HACER EL TRATAMIENTO DE LO RECIBIDO PARA GENERAR UN STRING--> LUEOG VER COMO METERLO EN PANTALLA HTML
     for (let i = 0; i < records.length; i++) {
-      //console.log(`record: ${records[i]}`);
       results.append(records[i]);
       results.append("\n");
-      leidos++;
     }//for
-    console.log('leidos: ' + leidos);
-    console.log(results.toString());
-  }
 
-  function genReportCUBO() {
+    //console.log('leidos: ' + records.length);
+    //console.log(results.toString());
+    
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.render("reportingCUBO.html", {title: 'Reporte bimensual Calidad Babel (CUBO) concluido leidos ' + records.length, 
+                                      entry: 4, content: results.toString()});
+  
+  });
+
+  function genReportCUBO(arr) {
     var db = new sqlite3.Database(databaseFile);
     var myQuery = "SELECT strftime('%d/%m/%Y',date(i99.fecha_estado_modif)) as fecha, i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE  ((date(i99.Fecha_de_tramitacion) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))  OR (date(i99.fecha_estado_modif) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))) AND (  (i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR  (i99.Tipo LIKE '%Entrega%' AND i99.Area_destino LIKE 'Desarrollo Gestionado%')) ORDER BY i99.Proyecto_ID, i99.fecha_estado_modif asc";
     return new Promise((resolve,reject)=>{
@@ -89,17 +80,16 @@ router.post('/genCUBO', (req, res) => {
         if(err){
           return console.error(err.message);
         }
-        i =0;
-        rows.forEach(function (row, i) {
-          i++;
-          data.push(`${i}->${row.fecha} - ${row.Proyecto} : ${row.Cod_GEDEON} - ${row.desc}`);
+        rows.forEach(function (row, index) {
+          arr.push(`${index}->${row.fecha} - ${row.Proyecto} : ${row.Cod_GEDEON} - ${row.desc}`);
         });
-        resolve(data);
+        resolve(arr);
       });//end of db.all
       
       db.close();
 
     });//end of Promise
+
    };//end of genReportCUBO
 
 
