@@ -50,27 +50,22 @@ router.get("/gedeones", (req, res) => {
 
 router.post('/genCUBO', async (req, res) => {
 
-    console.log("Server attends at HTTP-METHOD = POST");
+    //console.log("Server attends at HTTP-METHOD = POST");
     //let mes1 = req.body.mes1;
     //let mes2 =req.body.mes2;
-    //console.log("router: num1 de mes: " + num1);
-    //console.log("router: num2 de mes: " + num2);
+
     var mesInicial = moment().subtract(2, 'month').format("MM");
-    var mesFinal = moment().subtract(1, 'month').format("MM");
-    //otros formatos "YYYY MM DD
+    var mesFinal = moment().subtract(1, 'month').format("MM"); //otros formatos de salida "YYYY MM DD
     
     var data = [];
     records=await genReportCUBO(data);
 
     var bloques = new StringBuffer();
     var contadorBloques = 0;
-    var proyectoAux = '';
-    var mesAux = '';
-    var numPeticionesMes1 = 0;
-    var numPeticionesMes2 = 0;
-    // TODO: HACER EL TRATAMIENTO DE LO RECIBIDO PARA GENERAR UN STRING como el que requiere la plantilla de Word
+    var proyectoAux = '', mesAux = '';
+    var numPeticionesMes1 = 0, numPeticionesMes2 = 0;
+
     for (let i = 0; i < records.length; i++) {
-     
       var splitter_ = records[i].split("|");
       var proyecto_ = splitter_[0];
       var mes_ = splitter_[1];
@@ -78,8 +73,8 @@ router.post('/genCUBO', async (req, res) => {
       var descGedeon_ = splitter_[3];
       if (proyectoAux == '' || proyecto_ != proyectoAux){
         if (proyectoAux != ''){
-          var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna petición en ': ` ${numPeticionesMes1} peticiones en `;
-          var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna petición en ': ` ${numPeticionesMes2} peticiones en `;
+          var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna actividad en ': ((numPeticionesMes1 == 1)?' una actividad en ':` ${numPeticionesMes1} actividades en `);
+          var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna actividad en ': ((numPeticionesMes2 == 1)?' una actividad en ':` ${numPeticionesMes2} actividades en `);
           bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
           bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
           bloques.append("\n");
@@ -115,11 +110,17 @@ router.post('/genCUBO', async (req, res) => {
       
     }//for
 
-    console.log("num. bloques: " + contadorBloques);
+    var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna actividad en ': ((numPeticionesMes1 == 1)?' una actividad en ':` ${numPeticionesMes1} actividades en `);
+    var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna actividad en ': ((numPeticionesMes2 == 1)?' una actividad en ':` ${numPeticionesMes2} actividades en `);
+    bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
+    bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
+    bloques.append("\n");
+
+    //console.log("num. bloques: " + contadorBloques);
     
-    res.setHeader("Content-Type", "text/plain; charset=UTF-8");
-    res.write("No. peticiones: " + records.length);
-    res.write("\n\n");
+    res.setHeader("Content-Type", "text/plain; charset=UTF-8");//letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
+    res.write("Número total de actividades realizadas: " + records.length);
+    res.write("\n");
     res.write(bloques.toString());
     res.end();
   
