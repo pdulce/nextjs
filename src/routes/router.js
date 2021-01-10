@@ -96,7 +96,7 @@ router.post("/genCertMensualAT", async (req, res) => {
   
 });
 
-router.post('/genCUBO', async (req, res) => {
+router.post("/genCUBO", async (req, res) => {
 
     //console.log("Server attends at HTTP-METHOD = POST");
     //let mes1 = req.body.mes1;
@@ -172,7 +172,22 @@ router.post('/genCUBO', async (req, res) => {
     res.write(bloques.toString());
     res.end();
   
-  });
+});
+
+
+router.post("/caducanSoon", async (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=UTF-8");
+  res.write("En construcción");
+  res.write("\n");
+  res.end();
+});
+
+router.post("/informePPTX", async (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=UTF-8");
+  res.write("En construcción");
+  res.write("\n");
+  res.end();
+});
 
 function genReportCUBO(arr) {
     var db = new sqlite3.Database(databaseFile);
