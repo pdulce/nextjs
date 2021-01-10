@@ -5,12 +5,13 @@
   
 <body>
     <%- include ('partials/navigation.html') %>
-    
+
+    <h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=title %></h4>
     <!--SECTION ONE-->
     <section class="container-fluid" id="home">
         <div class="row bg-dark text-white p-5 text-center">
             <div class="col-sm-5">
-                <h4> <%=title%></h4>
+                <h4> Generar informe bimensual Métrica CUBO (Babel)</h4>
             </div>
             <div class="col-sm-5">
                 <form action="genCUBO" method="POST">
@@ -26,20 +27,20 @@
                         <label for="plainTxtGedeones" class="form-label">Seleccione fichero</label>
                         <input class="form-control form-control-sm" name="fileCUBO" id="plainTxtGedeones" type="file">
                     </!--div>-->
-                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-3x"></i></button>
+                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
             </div>
+            <div class="row bg-dark text-white p-5 text-center">
+                <div class="col-sm-5">
+                    <h4> Generar Certificado Mensual UTE de Actividades del Proyecto</h4>
+                </div>
+                <div class="col-sm-5">
+                    <form action="genCertMensualAT" method="POST">
+                        <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                    </form>
+                </div>
         </div>
-    </section class="container-fluid" id="procesado">
-         <div class="row bg-dark text-white p-5 text-center">
-            <h5> <%=content%></h5>
-            <!--div class="col-sm-5">
-                
-            </div>-->
-        </div>
-    <section>
-
-
+ 
     </section>
 
   <%-include ('partials/footer.html'); %>
