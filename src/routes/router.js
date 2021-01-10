@@ -176,6 +176,9 @@ router.post("/genCUBO", async (req, res) => {
 
 
 router.post("/caducanSoon", async (req, res) => {
+  //TODO: este informe lo tienes cais hecho: parametriza con un text-input el número de días del periodo en que caducan peticiones
+  
+  let dias = req.body.diasfin;
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write("En construcción");
   res.write("\n");
