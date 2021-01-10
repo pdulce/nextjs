@@ -55,12 +55,10 @@ router.post('/genCUBO', async (req, res) => {
     //let mes2 =req.body.mes2;
     //console.log("router: num1 de mes: " + num1);
     //console.log("router: num2 de mes: " + num2);
-    var mesInicial = moment().subtract(2, 'month');
-    var mesFinal = moment().subtract(1, 'month');
+    var mesInicial = moment().subtract(2, 'month').format("MM");
+    var mesFinal = moment().subtract(1, 'month').format("MM");
+    //otros formatos "YYYY MM DD
     
-    console.log("Mes inicial informe: " + mesInicial.format("MM"));//otros formatos "YYYY MM DD
-    console.log("Mes final informe: " + mesFinal.format("MM"));
-
     var data = [];
     records=await genReportCUBO(data);
 
@@ -79,10 +77,19 @@ router.post('/genCUBO', async (req, res) => {
       var codGedeon_ = splitter_[2];
       var descGedeon_ = splitter_[3];
       if (proyectoAux == '' || proyecto_ != proyectoAux){
+        if (proyectoAux != ''){
+          var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna petición en ': ` ${numPeticionesMes1} peticiones en `;
+          var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna petición en ': ` ${numPeticionesMes2} peticiones en `;
+          bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
+          bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
+          bloques.append("\n");
+        }
+         numPeticionesMes1 = 0;
+        numPeticionesMes2 = 0;
         contadorBloques++;
         proyectoAux = proyecto_;
         mesAux = mes_;
-       
+              
         bloques.append("\n\n");
         bloques.append(proyectoAux);
         bloques.append("\n\n");
@@ -99,9 +106,13 @@ router.post('/genCUBO', async (req, res) => {
       }
       bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
       bloques.append("\n");
-      if (i ==198){
-        break;
+      
+      if (parseInt(mesAux) == parseInt(mesInicial)){
+        numPeticionesMes1++;
+      }else if (parseInt(mesAux)  == parseInt(mesFinal)){
+        numPeticionesMes2++;
       }
+      
     }//for
 
     console.log("num. bloques: " + contadorBloques);
