@@ -7,7 +7,6 @@ const moment = require("moment");
 require('moment/locale/cs');
 
 //constants
-const monthList = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -48,10 +47,10 @@ router.get("/gedeones", (req, res) => {
 });
 
 router.post("/genCertMensualAT", async (req, res) => {
-
   
   var mesCertificado = moment().subtract(1, 'month').format("MM");
   var data = [];
+
   records = await moduleImport1.genCertifMensualAT(data);
 
   var bloques = new StringBuffer();
@@ -78,7 +77,7 @@ router.post("/genCertMensualAT", async (req, res) => {
     numPeticionesMes++;
   }//for 
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");//letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
-  res.write("Número total de actividades realizadas en " + monthList[parseInt(mesCertificado)-1] + ": " + records.length);
+  res.write("Número total de actividades realizadas en " + moduleImport1.monthList[parseInt(mesCertificado)-1] + ": " + records.length);
   res.write("\n");
   res.write(bloques.toString());
   res.end();
@@ -106,8 +105,8 @@ router.post("/genCUBO", async (req, res) => {
         if (proyectoAux != ''){
           var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna actividad en ': ((numPeticionesMes1 == 1)?' una actividad en ':` ${numPeticionesMes1} actividades en `);
           var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna actividad en ': ((numPeticionesMes2 == 1)?' una actividad en ':` ${numPeticionesMes2} actividades en `);
-          bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
-          bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
+          bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(moduleImport1.monthList[parseInt(mesInicial)-1] );
+          bloques.append(" y").append(numPets2EnLiteral).append(moduleImport1.monthList[parseInt(mesFinal)-1]);
           bloques.append("\n");
         }
          numPeticionesMes1 = 0;
@@ -118,7 +117,7 @@ router.post("/genCUBO", async (req, res) => {
         bloques.append("\n\n");
         bloques.append(proyectoAux);
         bloques.append("\n\n");
-        bloques.append(monthList[parseInt(mesAux)-1]);
+        bloques.append(moduleImport1.monthList[parseInt(mesAux)-1]);
         bloques.append("\n");
       }
      
@@ -126,7 +125,7 @@ router.post("/genCUBO", async (req, res) => {
       if (mes_ != mesAux){
         mesAux = mes_;
         bloques.append("\n");
-        bloques.append(monthList[parseInt(mesAux)-1]);
+        bloques.append(moduleImport1.monthList[parseInt(mesAux)-1]);
         bloques.append("\n");
       }
       bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
@@ -142,8 +141,8 @@ router.post("/genCUBO", async (req, res) => {
 
     var numPets1EnLiteral = (numPeticionesMes1 == 0)?' ninguna actividad en ': ((numPeticionesMes1 == 1)?' una actividad en ':` ${numPeticionesMes1} actividades en `);
     var numPets2EnLiteral = (numPeticionesMes2 == 0)?' ninguna actividad en ': ((numPeticionesMes2 == 1)?' una actividad en ':` ${numPeticionesMes2} actividades en `);
-    bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
-    bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
+    bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(moduleImport1.monthList[parseInt(mesInicial)-1] );
+    bloques.append(" y").append(numPets2EnLiteral).append(moduleImport1.monthList[parseInt(mesFinal)-1]);
     bloques.append("\n");
    
     res.setHeader("Content-Type", "text/plain; charset=UTF-8");//letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)

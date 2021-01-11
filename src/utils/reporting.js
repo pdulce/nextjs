@@ -1,6 +1,7 @@
 
 const sqlite3 = require("sqlite3").verbose();
 const databaseFile = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
+const monthList = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
 
 var genReportCUBO = function (arr) {
     var db = new sqlite3.Database(databaseFile);
@@ -97,4 +98,4 @@ var genReportCaducadas = function (dias, arr) {
 
 };//end of genReportCUBO
 
-module.exports = {genReportCUBO, genCertifMensualAT, genReportPPTX, genReportCaducadas};
+module.exports = {genReportCUBO, genCertifMensualAT, genReportPPTX, genReportCaducadas, monthList};
