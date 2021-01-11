@@ -1,7 +1,7 @@
 //libraries
 const express = require("express");
 const bodyParser = require('body-parser');
-const moduleImport1 = require('../utils/reporting');
+const moduleReporter = require('../utils/reporting');
 const moment = require("moment");
 require('moment/locale/cs');
 
@@ -48,8 +48,8 @@ router.get("/gedeones", (req, res) => {
 router.post("/genCUBO", async (req, res) => {
  
   var data = [];
-  records = await moduleImport1.queryReportCUBO(data);
-  bloques = moduleImport1.genReportCUBO(records);
+  records = await moduleReporter.queryReportCUBO(data);
+  bloques = moduleReporter.genReportCUBO(records);
 
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write(bloques);
@@ -63,8 +63,8 @@ router.post("/genCertMensualAT", async (req, res) => {
   
   var data = [];
 
-  records = await moduleImport1.queryCertifMensualAT(data);
-  bloques = moduleImport1.genCertifMensualAT(records, mesCertificado);
+  records = await moduleReporter.queryCertifMensualAT(data);
+  bloques = moduleReporter.genCertifMensualAT(records, mesCertificado);
   
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write(bloques);
@@ -75,8 +75,8 @@ router.post("/caducanSoon", async (req, res) => {
   let diasfin = req.body.diasfin;
     
   var data = [];
-  records = await moduleImport1.queryReportCaducadas(diasfin, data);
-  bloques = moduleImport1.genReportCaducadas(records, diasfin);
+  records = await moduleReporter.queryReportCaducadas(diasfin, data);
+  bloques = moduleReporter.genReportCaducadas(records, diasfin);
   
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   
@@ -93,8 +93,8 @@ router.post("/informePPTX", async (req, res) => {
     //console.log(`fecha desde: ${fechaDesde}`);
 
     var data = [];
-    records = await moduleImport1.queryReportPPTX(fechaDesde, data);
-    bloques = moduleImport1.genReportPPTX(records);
+    records = await moduleReporter.queryReportPPTX(fechaDesde, data);
+    bloques = moduleReporter.genReportPPTX(records);
         
     res.setHeader("Content-Type", "text/plain; charset=UTF-8");
     res.write(bloques);
