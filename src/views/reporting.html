@@ -11,7 +11,7 @@
     <section class="container-fluid" id="home">
         <div class="row bg-dark text-white p-5 text-center">
             <div class="col-sm-2">
-                <h5> Generar informe bimensual Métrica CUBO (Babel)</h5>
+                <h5> Informe bimensual Métrica CUBO (Babel)</h5>
             </div>
             <div class="col-sm-1">
                 <form action="genCUBO" method="POST">
@@ -20,7 +20,7 @@
             </div>
 
             <div class="col-sm-2">
-                <h5> &nbsp;&nbsp;Generar Certificado Mensual UTE Actividades AT</h5>
+                <h5> &nbsp;Informe Mensual UTE Actividades AT</h5>
             </div>
             <div class="col-sm-1">
                 <form action="genCertMensualAT" method="POST">
@@ -29,13 +29,13 @@
             </div>
 
             <div class="col-sm-2">
-                <h5> &nbsp;&nbsp;Generar Informe Peticiones que finalizan en x días</h5>
+                <h5> &nbsp;Informe Peticiones que finalizan en x días</h5>
             </div>
             <div class="col-sm-1">
                 <form action="/caducanSoon" method="POST">
                     <div class="mb-3">
                         <label for="diasfin" class="form-label">Días</label>
-                        <input type="text" class="form-control" id="diasfin" aria-describedby="diasfinHelp">
+                        <input type="text" class="form-control" id="diasfin" aria-describedby="diasfinHelp" value="7">
                         <div id="diasfinHelp" class="form-text">Establezca el núm. x de días</div>
                     </div>
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
@@ -43,10 +43,20 @@
             </div>
 
             <div class="col-sm-2">
-                <h5> &nbsp;&nbsp;Generar Informe Actividades-mes para PPTX de Seguimiento</h5>
+                <h5> &nbsp;Informe Actividades para PPTX Seguimiento</h5>
             </div>
             <div class="col-sm-1">
                 <form action="/informePPTX" method="POST">
+                    <div class="mb-6">
+                        <label for="fecultimoComite" class="form-label">Fecha último comité</label>
+                        <input size="12" type="text" class="form-control" name="fecultimoComite" id="fecultimoComite" aria-describedby="fecultimoComiteHelp" readonly>
+                        <div id="fecultimoComiteHelp" class="form-text">formato <i>yyyy-dd-mm</i></div>
+                        <script type="text/javascript">
+                            $("#fecultimoComite").datetimepicker({
+                                format: 'yyyy-mm-dd'
+                            });
+                        </script>
+                    </div>
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
             </div>

@@ -186,12 +186,71 @@ router.post("/caducanSoon", async (req, res) => {
 });
 
 router.post("/informePPTX", async (req, res) => {
-  //TODO: este informe toma hasta el día de hoy como fecha tope de búsqueda de trabajos, y desde una fecha concreta recibida como parámetro
-  // en el formulario. Esos datos se han de pasar a la query
-  res.setHeader("Content-Type", "text/plain; charset=UTF-8");
-  res.write("En construcción");
-  res.write("\n");
-  res.end();
+
+    let fechaDesde = req.body.fecultimoComite;
+    console.log(`fecha desde: ${fechaDesde}`);
+      
+    var data = [];
+    records = await genReportPPTX(fechaDesde, data);
+    
+    var bloques = new StringBuffer();
+    var contadorBloques = 0;
+    var proyectoAux = '', areaAux = '', situacionAux = '';
+    
+    for (let i = 0; i < records.length; i++) {
+      var splitter_ = records[i].split("|");
+      var proyecto_ = splitter_[0];
+      var area_ = splitter_[1];
+      var situacion_ = splitter_[2];
+      var codGedeon_ = splitter_[3];
+      var descGedeon_ = splitter_[4];
+
+      //console.log("situacion: " + situacion_);
+
+      if (proyectoAux == '' || proyecto_ != proyectoAux){
+                
+        contadorBloques++;
+        proyectoAux = proyecto_;
+        areaAux = area_;
+        situacionAux = situacion_;
+              
+        bloques.append("\n\n");
+        bloques.append(proyectoAux);
+        bloques.append("\n\n");
+        bloques.append("\t" + areaAux);
+        bloques.append("\n\n");
+        bloques.append("\t\t" + situacionAux);
+        bloques.append("\n\n");
+      }
+     
+      //llenamos el bloque actual
+      if (area_ != areaAux){
+        areaAux = area_;
+        bloques.append("\n");
+        bloques.append("\t" + areaAux);
+        bloques.append("\n\n");
+        bloques.append("\t\t" + situacionAux);
+        bloques.append("\n\n");
+      }
+      if (situacion_ != situacionAux){
+        situacionAux = situacion_;
+        bloques.append("\n");
+        bloques.append("\t\t" + situacionAux);
+        bloques.append("\n\n");
+      }
+
+      bloques.append("\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_);
+      bloques.append("\n");
+      
+    }//for
+
+    //console.log("num. bloques: " + contadorBloques);
+    
+    res.setHeader("Content-Type", "text/plain; charset=UTF-8");
+    res.write("Número total de actividades realizadas: " + records.length);
+    res.write("\n");
+    res.write(bloques.toString());
+    res.end();
 });
 
 function genReportCUBO(arr) {
@@ -246,5 +305,28 @@ function genCertifMensualAT(arr) {
   });//end of Promise
 
 };//end of genReportCUBO
+
+
+function genReportPPTX(fechaDesde, arr) {
+  var db = new sqlite3.Database(databaseFile);
+  var myQuery = `SELECT i99.Proyecto_ID as Proyecto, i99.Area_destino as area, i99.id as Cod_GEDEON, i99.Estado as situacion, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen WHERE (i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado' OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto' OR i99.Area_destino LIKE 'Desarrollo Gestionado%') AND i99.Tipo NOT LIKE '%Entrega%' AND i99.Proyecto_ID IN ('FMAR', 'FOMA', 'SANI', 'FAM2', 'FAMA', 'FRMA', 'FOM2', 'WSRT') AND (i99.Estado LIKE '%curso%' OR (i99.Estado NOT LIKE '%curso%' AND (date(i99.Fecha_de_tramitacion) between date('${fechaDesde}') AND date('now')) ) OR ( (date(i99.Fecha_fin_de_desarrollo) between date('${fechaDesde}') AND date('now')) ) OR ( (date(i99.Fecha_de_finalizacion) between date('${fechaDesde}') AND date('now')) ) 	) ORDER BY i99.Proyecto_ID, i99.Area_destino, i99.Estado, i99.id asc`;
+  return new Promise((resolve,reject)=>{
+    db.all(myQuery, (err, rows) => {
+      if(err){
+        return console.error(err.message);
+      }
+      rows.forEach(function (row, index) {
+        //${index}->
+        arr.push(`${row.Proyecto} | ${row.area} | ${row.situacion} | ${row.Cod_GEDEON} | ${row.desc}`);
+      });
+      resolve(arr);
+    });//end of db.all
+    
+    db.close();
+
+  });//end of Promise
+
+};//end of genReportCUBO
+
 
 module.exports = router;//exportamos el alias router
