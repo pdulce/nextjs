@@ -207,29 +207,33 @@ router.post("/caducanSoon", async (req, res) => {
       proyectoAux = proyecto_;
       areaAux = area_;
       fechaFinAux = fechaFin_;
-            
+      var day = moment(fechaFinAux.split(" ")[1]);
       bloques.append("\n\n");
       bloques.append(proyectoAux);
       bloques.append("\n\n");
       bloques.append("\t" + areaAux);
       bloques.append("\n\n");
-      bloques.append("\t\t" + fechaFinAux);
+      bloques.append("\t\t" + day.format("DD/MM/yyyy"));
       bloques.append("\n\n");
+      
+      
     }
     
     //llenamos el bloque actual
     if (area_ != areaAux){
       areaAux = area_;
+      var day = moment(fechaFinAux.split(" ")[1]);
       bloques.append("\n");
       bloques.append("\t" + areaAux);
       bloques.append("\n\n");
-      bloques.append("\t\t" + fechaFinAux);
+      bloques.append("\t\t" + day.format("DD/MM/yyyy"));
       bloques.append("\n\n");
     }
     if (fechaFin_ != fechaFinAux){
       fechaFinAux = fechaFin_;
+      var day = moment(fechaFinAux.split(" ")[1]);
       bloques.append("\n");
-      bloques.append("\t\t" + fechaFinAux);//formatea la fecha con la librería moment
+      bloques.append("\t\t" + day.format("DD/MM/yyyy"));//formatea la fecha con la librería moment
       bloques.append("\n\n");
     }
     
