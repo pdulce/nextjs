@@ -239,7 +239,7 @@ router.post("/informePPTX", async (req, res) => {
         bloques.append("\n\n");
       }
 
-      bloques.append("\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_);
+      bloques.append("\t\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_);
       bloques.append("\n");
       
     }//for
@@ -328,5 +328,26 @@ function genReportPPTX(fechaDesde, arr) {
 
 };//end of genReportCUBO
 
+function genReportCUBO(dias, arr) {
+  var db = new sqlite3.Database(databaseFile);
+  //strftime('%d/%m/%Y',date(i99.fecha_estado_modif)) as fecha
+  var myQuery = "SELECT strftime('%m',date(i99.fecha_estado_modif)) as mes, i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE  ((date(i99.Fecha_de_tramitacion) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))  OR (date(i99.fecha_estado_modif) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))) AND (  (i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR  (i99.Tipo LIKE '%Entrega%' AND i99.Area_destino LIKE 'Desarrollo Gestionado%')) GROUP BY i99.Proyecto_ID, i99.fecha_estado_modif ORDER BY i99.Proyecto_ID, i99.fecha_estado_modif, i99.id asc";
+  return new Promise((resolve,reject)=>{
+    db.all(myQuery, (err, rows) => {
+      if(err){
+        return console.error(err.message);
+      }
+      rows.forEach(function (row, index) {
+        //${index}->
+        arr.push(`${row.Proyecto} | ${row.mes} | ${row.Cod_GEDEON} | ${row.desc}`);
+      });
+      resolve(arr);
+    });//end of db.all
+    
+    db.close();
+
+  });//end of Promise
+
+};//end of genReportCUBO
 
 module.exports = router;//exportamos el alias router
