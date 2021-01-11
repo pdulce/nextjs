@@ -1,58 +1,58 @@
 //libraries
 const express = require("express");
 const bodyParser = require('body-parser');
+const moduleImport1 = require('../utils/reporting');
 const StringBuffer = require("stringbuffer");
 const moment = require("moment");
-const sqlite3 = require("sqlite3").verbose();
 require('moment/locale/cs');
 
 //constants
 const monthList = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
-const databaseFile = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("home.html", {title: 'Bienvenido a Home!', entry: '1'});
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("home.html", {title: 'Bienvenido a Home!', entry: '1'});
 });
 
 router.get("/home", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("home.html", {title: 'Bienvenido a Home!', entry: 1});
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("home.html", {title: 'Bienvenido a Home!', entry: 1});
 });
 
 router.get("/about", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=UTF-8");
-    res.render("about.html", {title: 'Acerca de mí', entry: 2});
+  res.setHeader("Content-Type", "text/html; charset=UTF-8");
+  res.render("about.html", {title: 'Acerca de mí', entry: 2});
 });
 
 router.get("/contact", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=UTF-8");
-    res.render("contact.html", {title: 'Contacte vía e-mail', entry: 3});
+  res.setHeader("Content-Type", "text/html; charset=UTF-8");
+  res.render("contact.html", {title: 'Contacte vía e-mail', entry: 3});
 });
 
 router.get("/reporting", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("reporting.html", {title: 'Informes del contrato CDISM', entry: 4});
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("reporting.html", {title: 'Informes del contrato CDISM', entry: 4});
 });
 
 router.get("/investmentResearch", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5});
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5});
 });
 
-router.get("/gedeones", (req, res) => {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render("gedeones.html", {title: 'Consulta de Gedeones', entry: 6});
+router.get("/gedeones", (req, res) => {  
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("gedeones.html", {title: 'Consulta de Gedeones', entry: 6});
 });
 
 router.post("/genCertMensualAT", async (req, res) => {
+
   
   var mesCertificado = moment().subtract(1, 'month').format("MM");
   var data = [];
-  records = await genCertifMensualAT(data);
+  records = await moduleImport1.genCertifMensualAT(data);
 
   var bloques = new StringBuffer();
   var proyectoAux = '';
@@ -64,11 +64,6 @@ router.post("/genCertMensualAT", async (req, res) => {
     var codGedeon_ = splitter_[1];
     var descGedeon_ = splitter_[2];
     if (proyectoAux == '' || proyecto_ != proyectoAux){
-      /*if (proyectoAux != ''){
-        var numPetsEnLiteral = (numPeticionesMes == 0)?' ninguna actividad en ': ((numPeticionesMes == 1)?' una actividad en ':` ${numPeticionesMes} actividades en `);
-        bloques.append("\nResumen ").append("=>").append(numPetsEnLiteral).append(monthList[parseInt(mesCertificado)-1] );
-        bloques.append("\n");
-      }*/
       numPeticionesMes = 0;
       proyectoAux = proyecto_;
                  
@@ -80,36 +75,24 @@ router.post("/genCertMensualAT", async (req, res) => {
     //llenamos el bloque actual
     bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
     bloques.append("\n"); 
-    
     numPeticionesMes++;
-          
-  }//for
-  /*var numPetsEnLiteral = (numPeticionesMes == 0)?' ninguna actividad en ': ((numPeticionesMes == 1)?' una actividad en ':` ${numPeticionesMes} actividades en `);
-  bloques.append("\nResumen ").append("=>").append(numPetsEnLiteral).append(monthList[parseInt(mesCertificado)-1] );
-  bloques.append("\n");*/
-  
+  }//for 
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");//letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
   res.write("Número total de actividades realizadas en " + monthList[parseInt(mesCertificado)-1] + ": " + records.length);
   res.write("\n");
   res.write(bloques.toString());
   res.end();
-  
 });
 
 router.post("/genCUBO", async (req, res) => {
-
-    //console.log("Server attends at HTTP-METHOD = POST");
-    //let mes1 = req.body.mes1;
-    //let mes2 =req.body.mes2;
 
     var mesInicial = moment().subtract(2, 'month').format("MM");
     var mesFinal = moment().subtract(1, 'month').format("MM"); //otros formatos de salida "YYYY MM DD
     
     var data = [];
-    records=await genReportCUBO(data);
+    records=await moduleImport1.genReportCUBO(data);
 
     var bloques = new StringBuffer();
-    var contadorBloques = 0;
     var proyectoAux = '', mesAux = '';
     var numPeticionesMes1 = 0, numPeticionesMes2 = 0;
 
@@ -129,7 +112,6 @@ router.post("/genCUBO", async (req, res) => {
         }
          numPeticionesMes1 = 0;
         numPeticionesMes2 = 0;
-        contadorBloques++;
         proyectoAux = proyecto_;
         mesAux = mes_;
               
@@ -163,9 +145,7 @@ router.post("/genCUBO", async (req, res) => {
     bloques.append("\nResumen ").append("=>").append(numPets1EnLiteral).append(monthList[parseInt(mesInicial)-1] );
     bloques.append(" y").append(numPets2EnLiteral).append(monthList[parseInt(mesFinal)-1]);
     bloques.append("\n");
-
-    //console.log("num. bloques: " + contadorBloques);
-    
+   
     res.setHeader("Content-Type", "text/plain; charset=UTF-8");//letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
     res.write("Número total de actividades realizadas: " + records.length);
     res.write("\n");
@@ -174,16 +154,14 @@ router.post("/genCUBO", async (req, res) => {
   
 });
 
-
 router.post("/caducanSoon", async (req, res) => {
   let diasfin = req.body.diasfin;
   console.log(`días próximos en que terminan gedeones: ${diasfin}`);
     
   var data = [];
-  records = await genReportCaducadas(diasfin, data);
+  records = await moduleImport1.genReportCaducadas(diasfin, data);
   
   var bloques = new StringBuffer();
-  var contadorBloques = 0;
   var proyectoAux = '', areaAux = '', fechaFinAux = '';
   
   for (let i = 0; i < records.length; i++) {
@@ -200,10 +178,8 @@ router.post("/caducanSoon", async (req, res) => {
     var descGedeon_ = splitter_[9];
     //`${row.Proyecto} | ${row.area_origen} | ${row.centro_origen} | ${row.Cod_GEDEON} | ${row.fecFechaFin} | ${row.tipo} | ${row.destino} | ${row.situacion} | ${row.fecNecesidad} | ${row.desc}`);
  
-
     if (proyectoAux == '' || proyecto_ != proyectoAux){
               
-      contadorBloques++;
       proyectoAux = proyecto_;
       areaAux = area_;
       fechaFinAux = fechaFin_;
@@ -214,9 +190,7 @@ router.post("/caducanSoon", async (req, res) => {
       bloques.append("\t" + areaAux);
       bloques.append("\n\n");
       bloques.append("\t\t" + day.format("DD/MM/yyyy"));
-      bloques.append("\n\n");
-      
-      
+      bloques.append("\n\n");     
     }
     
     //llenamos el bloque actual
@@ -242,8 +216,6 @@ router.post("/caducanSoon", async (req, res) => {
     
   }//for
 
-  //console.log("num. bloques: " + contadorBloques);
-  
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write(`Número total de actividades que van a finalizar en los próximos ${diasfin} días => ${records.length}`);
   res.write("\n");
@@ -254,13 +226,15 @@ router.post("/caducanSoon", async (req, res) => {
 router.post("/informePPTX", async (req, res) => {
 
     let fechaDesde = req.body.fecultimoComite;
+    if (fechaDesde == ''){
+      fechaDesde = moment().format("yyyy-MM-DD");
+    }
     console.log(`fecha desde: ${fechaDesde}`);
-      
+
     var data = [];
-    records = await genReportPPTX(fechaDesde, data);
+    records = await moduleImport1.genReportPPTX(fechaDesde, data);
     
     var bloques = new StringBuffer();
-    var contadorBloques = 0;
     var proyectoAux = '', areaAux = '', situacionAux = '';
     
     for (let i = 0; i < records.length; i++) {
@@ -271,11 +245,7 @@ router.post("/informePPTX", async (req, res) => {
       var codGedeon_ = splitter_[3];
       var descGedeon_ = splitter_[4];
 
-      //console.log("situacion: " + situacion_);
-
       if (proyectoAux == '' || proyecto_ != proyectoAux){
-                
-        contadorBloques++;
         proyectoAux = proyecto_;
         areaAux = area_;
         situacionAux = situacion_;
@@ -310,112 +280,11 @@ router.post("/informePPTX", async (req, res) => {
       
     }//for
 
-    //console.log("num. bloques: " + contadorBloques);
-    
     res.setHeader("Content-Type", "text/plain; charset=UTF-8");
     res.write("Número total de actividades realizadas: " + records.length);
     res.write("\n");
     res.write(bloques.toString());
     res.end();
 });
-
-function genReportCUBO(arr) {
-    var db = new sqlite3.Database(databaseFile);
-    //strftime('%d/%m/%Y',date(i99.fecha_estado_modif)) as fecha
-    var myQuery = "SELECT strftime('%m',date(i99.fecha_estado_modif)) as mes, i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE  ((date(i99.Fecha_de_tramitacion) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))  OR (date(i99.fecha_estado_modif) between date('now','start of month','-2 month') AND date('now','start of month', '-1 day'))) AND (  (i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR  (i99.Tipo LIKE '%Entrega%' AND i99.Area_destino LIKE 'Desarrollo Gestionado%')) GROUP BY i99.Proyecto_ID, i99.fecha_estado_modif ORDER BY i99.Proyecto_ID, i99.fecha_estado_modif, i99.id asc";
-    return new Promise((resolve,reject)=>{
-      db.all(myQuery, (err, rows) => {
-        if(err){
-          return console.error(err.message);
-        }
-        rows.forEach(function (row, index) {
-          //${index}->
-          arr.push(`${row.Proyecto} | ${row.mes} | ${row.Cod_GEDEON} | ${row.desc}`);
-        });
-        resolve(arr);
-      });//end of db.all
-      
-      db.close();
-
-    });//end of Promise
-
-};//end of genReportCUBO
-
-
-function genCertifMensualAT(arr) {
-  var db = new sqlite3.Database(databaseFile);
-  var myQuery = "SELECT i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE ("+
-  "(date(i99.Fecha_de_tramitacion) between date('now','start of month','-1 month') AND date('now','start of month','-1 day'))  OR"+
-  "(date(i99.fecha_estado_modif) between date('now','start of month','-1 month') AND date('now','start of month','-1 day'))"+
-  ") AND "+
-    "("+
-      "(i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR "+
-      "(i99.Tipo LIKE '%Entrega%' AND i99.Area_destino LIKE 'Desarrollo Gestionado%')"+
-    ")"+
-    "AND i99.Proyecto_ID IN ('FMAR', 'FOMA', 'SANI', 'FAM2', 'FAMA', 'FRMA', 'FOM2', 'WSRT', 'WISM', 'WBOF')"+
-    "ORDER BY i99.Proyecto_ID, i99.fecha_estado_modif asc";
-  return new Promise((resolve,reject)=>{
-    db.all(myQuery, (err, rows) => {
-      if(err){
-        return console.error(err.message);
-      }
-      rows.forEach(function (row, index) {
-        //${index}->
-        arr.push(`${row.Proyecto} | ${row.Cod_GEDEON} | ${row.desc}`);
-      });
-      resolve(arr);
-    });//end of db.all
-    
-    db.close();
-
-  });//end of Promise
-
-};//end of genReportCUBO
-
-
-function genReportPPTX(fechaDesde, arr) {
-  var db = new sqlite3.Database(databaseFile);
-  var myQuery = `SELECT i99.Proyecto_ID as Proyecto, i99.Area_destino as area, i99.id as Cod_GEDEON, i99.Estado as situacion, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen WHERE (i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado' OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto' OR i99.Area_destino LIKE 'Desarrollo Gestionado%') AND i99.Tipo NOT LIKE '%Entrega%' AND i99.Proyecto_ID IN ('FMAR', 'FOMA', 'SANI', 'FAM2', 'FAMA', 'FRMA', 'FOM2', 'WSRT') AND (i99.Estado LIKE '%curso%' OR (i99.Estado NOT LIKE '%curso%' AND (date(i99.Fecha_de_tramitacion) between date('${fechaDesde}') AND date('now')) ) OR ( (date(i99.Fecha_fin_de_desarrollo) between date('${fechaDesde}') AND date('now')) ) OR ( (date(i99.Fecha_de_finalizacion) between date('${fechaDesde}') AND date('now')) ) 	) ORDER BY i99.Proyecto_ID, i99.Area_destino, i99.Estado, i99.id asc`;
-  return new Promise((resolve,reject)=>{
-    db.all(myQuery, (err, rows) => {
-      if(err){
-        return console.error(err.message);
-      }
-      rows.forEach(function (row, index) {
-        //${index}->
-        arr.push(`${row.Proyecto} | ${row.area} | ${row.situacion} | ${row.Cod_GEDEON} | ${row.desc}`);
-      });
-      resolve(arr);
-    });//end of db.all
-    
-    db.close();
-
-  });//end of Promise
-
-};//end of genReportCUBO
-
-function genReportCaducadas(dias, arr) {
-  var db = new sqlite3.Database(databaseFile);
-  var myQuery = `SELECT i99.Proyecto_ID as Proyecto, s74.nombre as area_origen, s68.nombre as centro_origen, i99.id as Cod_GEDEON, i99.Titulo as desc, i99.Des_fecha_prevista_fin as fecFechaFin, i99.Tipo as tipo, i99.Area_destino as destino, i99.Estado as situacion, i99.Fecha_de_necesidad as fecNecesidad FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE date(i99.Des_fecha_prevista_fin) between date('now') AND date('now', '+${dias} day') AND (i99.Des_fecha_real_fin is null OR date(i99.Des_fecha_real_fin) < date('now')) AND i99.Estado <> 'Petición de trabajo finalizado' ORDER BY i99.Proyecto_ID, i99.Area_destino asc`;
-  
-  return new Promise((resolve,reject)=>{
-    db.all(myQuery, (err, rows) => {
-      if(err){
-        return console.error(err.message);
-      }
-      rows.forEach(function (row, index) {
-        //${index}->
-        arr.push(`${row.Proyecto} | ${row.area_origen} | ${row.centro_origen} | ${row.Cod_GEDEON} | ${row.fecFechaFin} | ${row.tipo} | ${row.destino} | ${row.situacion} | ${row.fecNecesidad} | ${row.desc}`);
-      });
-      resolve(arr);
-    });//end of db.all
-    
-    db.close();
-
-  });//end of Promise
-
-};//end of genReportCUBO
-
-
 
 module.exports = router;//exportamos el alias router
