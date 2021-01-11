@@ -37,7 +37,15 @@ router.get("/reporting", (req, res) => {
 
 router.get("/investmentResearch", (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5});
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: ''});
+});
+
+router.post("/discover", (req, res) => {
+  
+  let terminos = req.body.temas;
+  //console.log("términos: " + terminos);
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: 'fin búsqueda'});
 });
 
 router.get("/gedeones", (req, res) => {  
