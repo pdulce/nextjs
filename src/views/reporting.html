@@ -10,28 +10,18 @@
     <!--SECTION ONE-->
     <section class="container-fluid" id="home">
         <div class="row bg-dark text-white p-5 text-center">
-            <div class="col-sm-2">
-                <h5> Informe bimensual Métrica CUBO (Babel)</h5>
+            <div class="col-sm-3 vertical-center">
+                <h5> &nbsp;Informe bimensual Métrica CUBO (Babel)</h5>
+                <br>
+                <hr>
+                <br>
+                <h5> &nbsp;Informe Peticiones que finalizan en x días</h5>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <form action="genCUBO" method="POST">
                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
-            </div>
-
-            <div class="col-sm-2">
-                <h5> &nbsp;Informe Mensual UTE Actividades AT</h5>
-            </div>
-            <div class="col-sm-1">
-                <form action="genCertMensualAT" method="POST">
-                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
-                </form>
-            </div>
-
-            <div class="col-sm-2">
-                <h5> &nbsp;Informe Peticiones que finalizan en x días</h5>
-            </div>
-            <div class="col-sm-1">
+                <br>
                 <form action="/caducanSoon" method="POST">
                     <div class="mb-3">
                         <label for="diasfin" class="form-label">Días</label>
@@ -42,15 +32,23 @@
                 </form>
             </div>
 
-            <div class="col-sm-2">
+            <div class="col-sm-3">
+                <h5> &nbsp;Informe Mensual UTE Actividades AT</h5>
+                <br>
+                <hr>
+                <br>
                 <h5> &nbsp;Informe Actividades para PPTX Seguimiento</h5>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
+                <form action="genCertMensualAT" method="POST">
+                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                </form>
+                <br>
                 <form action="/informePPTX" method="POST">
                     <div class="mb-6">
                         <label for="fecultimoComite" class="form-label">Fecha último comité</label>
                         <input size="12" type="text" class="form-control" name="fecultimoComite" id="fecultimoComite" aria-describedby="fecultimoComiteHelp" readonly>
-                        <div id="fecultimoComiteHelp" class="form-text">formato <i>yyyy-dd-mm</i></div>
+                        <div id="fecultimoComiteHelp" class="form-text">formato <i>yyyy-mm-dd</i></div>
                         <script type="text/javascript">
                             $("#fecultimoComite").datetimepicker({
                                 format: 'yyyy-mm-dd'
@@ -60,7 +58,7 @@
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
             </div>
-
+           
         </div>
    </section>
 
