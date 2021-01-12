@@ -1,6 +1,10 @@
 //libraries
 const express = require("express")
 const bodyParser = require('body-parser')
+const http = require('http')
+const fs = require('fs')
+const path = require("path")
+const Stream = require('stream').Transform
 const moment = require("moment")
 require('moment/locale/cs')
 
@@ -43,7 +47,21 @@ router.get("/discover", async (req, res) => {
   let terminos = "saludar";
   //TODO: buscar una imagen aleatoria via Google Images, por ejemplo, y descargarla, meterla en public/images con un nombre
   //, y pasarla al detector de imágenes, y tb, al 'src' de la página .html que vas a cargar
-  var predictionsDone = await discoverWTF.discover(terminos, 'nature.jpeg');
+  
+ var url = "http://offloadmedia.feverup.com/madridsecreto.co/wp-content/uploads/2020/04/08100923/librerias-con-encanto-madrid-libreria-bardon-1024x597.jpg";
+ //'http://www.google.com/images/srpr/logo11w.png'; 
+
+ http.request(url, function(response) {                                        
+  var data = new Stream();                                                    
+  response.on('data', function(chunk) {                                       
+    data.push(chunk);                                                         
+  });                                                                         
+  response.on('end', function() {                                             
+    fs.writeFileSync(path.join(__dirname, "../public/img/newImagen.jpeg"), data.read());                               
+  });                                                                         
+ }).end();
+ 
+ var predictionsDone = await discoverWTF.discover(terminos, 'newImagen.jpeg');
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -53,7 +71,7 @@ router.get("/discover", async (req, res) => {
 router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  var predictionsDone = await discoverWTF.discover(terminos, 'nature.jpeg');
+  var predictionsDone = await discoverWTF.discover(terminos, 'newImagen.jpeg');
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");

@@ -1,7 +1,6 @@
 const jpeg = require('jpeg-js')
 const fs = require('fs')
 const path = require("path")
-const StringBuffer = require("stringbuffer")
 const tf = require('@tensorflow/tfjs')
 // Load the binding (CPU computation)
 require('@tensorflow/tfjs-node')
