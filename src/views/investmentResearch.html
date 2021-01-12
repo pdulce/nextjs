@@ -8,53 +8,56 @@
 
     <div>
         <header class="row">&nbsp;</header>
-        <header class="row">
-            <div class="col-lg-7 text-center">
-                <h5>Machine Learning (ML) aplicado a la búsqueda de tendencias de los mercados y redes sociales en el mundo</h5> 
-            </div>
-            <div class="col-lg-10 text-center">
-                <img src="img/nature.jpeg" alt="mine">
-            </div>
-            <div class="col-rg-7 text-center">
-                <h5>Adivinando imagen...</h5>
-                <br><br>
-                <h6> 
-                    <ul> 
-                        <% content.map((result)=>{ %>
-                          <li>
-                              <%= result.className %> ==>  <%= result.probability %>
-                          </li>
-                        <% }) %>
-                    </ul>
-                </h6>
-            </div>
-        </header>
+        <h5>Machine Learning (ML) aplicado a la búsqueda de tendencias de los mercados y redes sociales en el mundo</h5> 
     </div>
 
-     <!--SECTION ONE-->
-     <section class="container-fluid" id="home">
-        <div class="row bg-dark text-white p-5 text-center">
-            <div class="col-sm-3 vertical-center">
-                <br>
-                <br>
-                <h5> &nbsp;Introduzca un tema sobre el que descubrir!!</h5>
-            </div>
-            <div class="col-sm-2">
-                <form action="/discover" method="POST">
-                    <div class="mb-3">
-                        <label for="temas" class="form-label">Términos de búsqueda</label>
-                        <input type="text" class="form-control" name="temas" id="temas" aria-describedby="temasHelp" value="<%=terminos%>">
-                        <div id="temasHelp" class="form-text">Separados por ','</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
-                </form>
-            </div>
-            <div class="col-sm-3 vertical-center">
-                <h5>Adivinando historias sobre estos términos...(en construcción)</h5>
-                <br><br>
-            </div>
+    <hr>
+    
+    <div class="container-fluid">
+        <div class="row align-items-start">
+          <div class="col">
+            <h6>Cargando imagen aleatoria...</h6>
+          </div>
+          <div class="col">
+            <img src="img/nature.jpeg" alt="mine">
+          </div>
+          <div class="col">
+            <h5>Adivinando imagen...</h5>
+            <h6> 
+                <ul> 
+                    <% content.map((result)=>{ %>
+                        <li>
+                            <%= result.className %> ==>  <%= result.probability %>
+                        </li>
+                    <% }) %>
+                </ul>
+            </h6>
+          </div>
         </div>
-   </section>
+    </div>
+
+    <hr>
+
+    <div class="container-fluid">
+        <div class="row align-items-end">
+          <div class="col">
+            <h5> &nbsp;Introduzca un tema sobre el que descubrir!!</h5>
+          </div>
+          <div class="col">
+            <form action="/discover" method="POST">
+                <div class="mb-3">
+                    <label for="temas" class="form-label">Términos de búsqueda</label>
+                    <input type="text" class="form-control" name="temas" id="temas" aria-describedby="temasHelp" value="<%=terminos%>">
+                    <div id="temasHelp" class="form-text">Separados por ','</div>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+            </form>
+          </div>
+          <div class="col">
+            <h5>Adivinando historias sobre estos términos...(en construcción)</h5>
+          </div>
+        </div>
+    </div>
 
     <%-include ('partials/footer.html'); %>
    
