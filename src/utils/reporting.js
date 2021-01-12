@@ -1,7 +1,7 @@
-const StringBuffer = require("stringbuffer");
-const moment = require("moment");
-require('moment/locale/cs');
-const sqlite3 = require("sqlite3").verbose();
+const StringBuffer = require("stringbuffer")
+const moment = require("moment")
+require('moment/locale/cs')
+const sqlite3 = require("sqlite3").verbose()
 
 const databaseFile = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
 const monthList = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
@@ -26,7 +26,7 @@ var queryReportCUBO = function (arr) {
 
     });//end of Promise
 
-};//end of genReportCUBO
+}//end of genReportCUBO
 
 var genReportCUBO = function(records){
   var mesInicial = moment().subtract(2, 'month').format("MM");
@@ -121,7 +121,7 @@ var queryCertifMensualAT = function (arr) {
 
   });//end of Promise
 
-};//end of genReportCUBO
+}//end of genReportCUBO
 
 var genCertifMensualAT = function (records, mesCertificado){
   var bloques = new StringBuffer();
@@ -175,7 +175,7 @@ var queryReportCaducadas = function (dias, arr) {
 
 
 
-};//end of genReportCUBO
+}//end of genReportCUBO
 
 var genReportCaducadas = function (records, diasfin){
   var bloques = new StringBuffer();
@@ -258,7 +258,7 @@ var queryReportPPTX = function (fechaDesde, arr) {
 
   });//end of Promise
 
-};//end of genReportCUBO
+}//end of genReportCUBO
 
 var genReportPPTX = function (records){
   var bloques = new StringBuffer();
@@ -314,4 +314,4 @@ var genReportPPTX = function (records){
   return bloques.toString();
 }
 
-module.exports = {queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, queryReportCaducadas, genReportCaducadas};
+module.exports = {queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, queryReportCaducadas, genReportCaducadas}

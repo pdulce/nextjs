@@ -1,9 +1,12 @@
 //libraries
-const express = require("express");
-const bodyParser = require('body-parser');
-const moduleReporter = require('../utils/reporting');
-const moment = require("moment");
-require('moment/locale/cs');
+const express = require("express")
+const bodyParser = require('body-parser')
+const moment = require("moment")
+require('moment/locale/cs')
+
+//my own modules
+const moduleReporter = require('../utils/reporting')
+const discoverWTF = require('../utils/discovery')
 
 //constants
 const router = express.Router();
@@ -43,6 +46,7 @@ router.get("/investmentResearch", (req, res) => {
 router.post("/discover", (req, res) => {
   
   let terminos = req.body.temas;
+  discoverWTF.discover(terminos);
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: 'fin búsqueda'});
