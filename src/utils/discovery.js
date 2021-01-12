@@ -36,29 +36,20 @@ const imageToInput = (image, numChannels) => {
   }
 
 const discover = async function (terms, imageRec){
-    const model = await mobilenet.load();
-    console.log('model charged!');
-    
-    var jpegData = fs.readFileSync(path.join(__dirname, `../public/img/${imageRec}`));
-    var imgRawData = jpeg.decode(jpegData, true);//a unixArray
-    //console.log(imgRawData);
 
-    var input_ = imageToInput(imgRawData, 3);
+  const model = await mobilenet.load();
+  console.log('model charged!');
+  
+  var jpegData = fs.readFileSync(imageRec);
+  var imgRawData = jpeg.decode(jpegData, true);//a unixArray
+  //console.log(imgRawData);
 
-    //console.log('input');
-    //console.log(input_);
+  var input_ = imageToInput(imgRawData, 3);
+  var predictions = await model.classify(input_);
 
-    var predictions = await model.classify(input_);
-
-    console.log('prediction done!!');
-    /*console.log(predictions);
-    var arr = new Array();
-    for (let i=0;i<predictions.length;i++){
-        //console.log(predictions[i]);
-        arr[i] = `${i+1}.${predictions[i].className}: ${predictions[i].probability}`;
-    }*/
-
-    return predictions;
+  console.log('prediction done!!');
+  
+  return predictions;
 } 
 
 

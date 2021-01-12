@@ -12,6 +12,7 @@ require('moment/locale/cs')
 //my own modules
 const moduleReporter = require('../utils/reporting')
 const discoverWTF = require('../utils/discovery')
+const nameOfImagen = 'newImage.jpg'
 
 //constants
 const router = express.Router();
@@ -46,42 +47,52 @@ router.get("/reporting", (req, res) => {
 router.get("/discover", async (req, res) => {
   
   let terminos = "saludar";
-  //TODO: buscar una imagen aleatoria via Google Images, por ejemplo, y descargarla, meterla en public/images con un nombre
-  //, y pasarla al detector de imágenes, y tb, al 'src' de la página .html que vas a cargar
-  
- var url = "https://offloadmedia.feverup.com/madridsecreto.co/wp-content/uploads/2020/04/08100923/librerias-con-encanto-madrid-libreria-bardon-1024x597.jpg";
 
- https.request(url, function(response) {                                        
-  var data = new Stream();                                                    
-  response.on('data', function(chunk) {                                       
-    data.push(chunk);                                                         
-  });                                                                         
-  response.on('end', function() {                                             
-    fs.writeFileSync(path.join(__dirname, "../public/img/newImagen.jpeg"), data.read());                               
-  });                                                                         
- }).end();
- 
- var predictionsDone = await discoverWTF.discover(terminos, 'newImagen.jpeg');
+  var pathOfImage = path.join(__dirname, `../public/img/${nameOfImagen}`);
+  if (fs.existsSync(path)) {
+    fs.unlink(pathOfImage, function (err){
+      if (err){
+        console.log(`error borrando fichero${pathOfImage}`);
+      }else{
+        console.log('file deleted!');
+      }
+    });
+  }
+
+  // Toma imágenes alteatorias de la web: https://pixabay.com/es/
+  var url = "https://cdn.pixabay.com/photo/2016/06/17/04/26/mountain-1462655_960_720.jpg";
+  https.request(url, function(response) {                                        
+    var data = new Stream();                                                    
+    response.on('data', function(chunk) {                                       
+      data.push(chunk);                                                         
+    });                                                                         
+    response.on('end', function() {                                             
+      fs.writeFileSync(pathOfImage, data.read());                               
+    });                                                                      
+  }).end();
+
+  var predictionsDone = await discoverWTF.discover(terminos, pathOfImage);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("investmentResearch.html", 
   {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, 
   terminos: terminos, 
-  imagen: 'newImagen.jpeg'});
+  imagen: nameOfImagen});
 });
 
 router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  var predictionsDone = await discoverWTF.discover(terminos, 'newImagen.jpeg');
+  var pathOfImage = path.join(__dirname, `../public/img/${nameOfImagen}`);
+  var predictionsDone = await discoverWTF.discover(terminos, pathOfImage);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', 
   entry: 5, content: predictionsDone, 
   terminos: terminos, 
-  imagen: 'newImagen.jpeg'});
+  imagen: nameOfImagen});
 });
 
 router.get("/gedeones", (req, res) => {  
