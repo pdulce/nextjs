@@ -43,10 +43,11 @@ router.get("/investmentResearch", (req, res) => {
   res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: ''});
 });
 
-router.post("/discover", (req, res) => {
+router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  discoverWTF.discover(terminos);
+  await discoverWTF.discover(terminos);
+
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: 'fin búsqueda'});

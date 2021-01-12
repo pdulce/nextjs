@@ -24,6 +24,7 @@
     "ejs": "^3.1.5",
     "excel-to-json-with-template": "^0.1.1",
     "express": "^4.17.1",
+    "jpeg-js": "^0.4.3",
     "json-to-table": "^4.2.1",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
