@@ -38,19 +38,26 @@ router.get("/reporting", (req, res) => {
   res.render("reporting.html", {title: 'Informes del contrato CDISM', entry: 4});
 });
 
-router.get("/investmentResearch", (req, res) => {
+router.get("/discover", async (req, res) => {
+  
+  let terminos = "saludar";
+  //TODO: buscar una imagen aleatoria via Google Images, por ejemplo, y descargarla, meterla en public/images con un nombre
+  //, y pasarla al detector de imágenes, y tb, al 'src' de la página .html que vas a cargar
+  var predictionsDone = await discoverWTF.discover(terminos, 'nature.jpeg');
+
+  //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: ''});
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, terminos: terminos});
 });
 
 router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  await discoverWTF.discover(terminos);
+  var predictionsDone = await discoverWTF.discover(terminos, 'nature.jpeg');
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: 'fin búsqueda'});
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, terminos: terminos});
 });
 
 router.get("/gedeones", (req, res) => {  
