@@ -2,6 +2,7 @@
 const express = require("express")
 const bodyParser = require('body-parser')
 const http = require('http')
+https = require('https');
 const fs = require('fs')
 const path = require("path")
 const Stream = require('stream').Transform
@@ -48,10 +49,9 @@ router.get("/discover", async (req, res) => {
   //TODO: buscar una imagen aleatoria via Google Images, por ejemplo, y descargarla, meterla en public/images con un nombre
   //, y pasarla al detector de imágenes, y tb, al 'src' de la página .html que vas a cargar
   
- var url = "http://offloadmedia.feverup.com/madridsecreto.co/wp-content/uploads/2020/04/08100923/librerias-con-encanto-madrid-libreria-bardon-1024x597.jpg";
- //'http://www.google.com/images/srpr/logo11w.png'; 
+ var url = "https://offloadmedia.feverup.com/madridsecreto.co/wp-content/uploads/2020/04/08100923/librerias-con-encanto-madrid-libreria-bardon-1024x597.jpg";
 
- http.request(url, function(response) {                                        
+ https.request(url, function(response) {                                        
   var data = new Stream();                                                    
   response.on('data', function(chunk) {                                       
     data.push(chunk);                                                         
@@ -65,7 +65,10 @@ router.get("/discover", async (req, res) => {
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, terminos: terminos});
+  res.render("investmentResearch.html", 
+  {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, 
+  terminos: terminos, 
+  imagen: 'newImagen.jpeg'});
 });
 
 router.post("/discover", async (req, res) => {
@@ -75,7 +78,10 @@ router.post("/discover", async (req, res) => {
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, terminos: terminos});
+  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', 
+  entry: 5, content: predictionsDone, 
+  terminos: terminos, 
+  imagen: 'newImagen.jpeg'});
 });
 
 router.get("/gedeones", (req, res) => {  
