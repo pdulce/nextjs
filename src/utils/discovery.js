@@ -46,24 +46,27 @@ const discover = async function (terms, imageRec){
   let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
   var term = terminos[ind];
   console.log('term aleatorio: ' + term);
-  let response = await fetch(`https://pixabay.com/es/photos/${term}`);// GET
+  let response = await fetch(`https://pixabay.com/es/photos/${term}/`);// GET
   let html = await response.text();
   let $ = cheerio.load(html);
 
-  let divcontent = $('body').find('div:first-child').find('div', '#content');
+  let divcontent = $('body').find('div', '#wrapper').find('div', '#content');
+  //console.log(divcontent.text());
   let divcontent__= $(divcontent).find('div', 'class="media_list"').find('div', 'style="background: #f6f5fa"');
+  //console.log(divcontent__.text());
   let divsInternos = $(divcontent__).find('div:first-child').
                                   find('div', 'class="flex_grid credits search_results"').
-                                  find('div', 'class="item"').toArray();
+                                  find('div', 'class="item"');
+  console.log(divsInternos.text());
 
-  console.log(divsInternos.length);
-  let imagenes = [];
+  //console.log(divsInternos.attribs);
+  /*let imagenes = [];
   for (let imagediv of divsInternos){
-    let imagen = $(imagediv).find('meta');
+    let imagen = $(imagediv).find('meta', 'itemprop="contentUrl"');
     //imagenes.push(imagen.attr('src'));
     console.log('imagen: '+ imagen);
   }
-  console.log(imagenes);
+  console.log(imagenes);*/
 
   //let _div = $(div_).find('div').find('div').toArray()[1];//este div es el 
   //let __divs = $(_div).find('div');//estos ya serían los elementos que buscamos, con su img dentro
