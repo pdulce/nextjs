@@ -10,6 +10,8 @@ require('moment/locale/cs')
 const moduleReporter = require('../utils/reporting')
 const discoverWTF = require('../utils/discovery')
 const nameOfImagen = 'newImage.jpg'
+const terminos = ['saludo', 'guerra', 'valle', 'palacio', 'hispania', 'Antigua Roma', 'Mediterráneo', 'Europa', 'República', 'Pandemia', 
+'filosofía', 'alquimia', 'deportes', 'escalada', 'historia del arte', 'literatura', 'geografía', 'historia', 'matemáticas', 'nuevas tecnologías']
 
 //constants
 const router = express.Router();
@@ -48,7 +50,17 @@ router.get("/discovered", (req, res) => {
 
 router.get("/discover", async (req, res) => {
   
-  var predictionsDone = await discoverWTF.discover('', nameOfImagen);
+  var term = '';
+  if (terms == ''){
+    let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
+    term = terminos[ind];
+  }else{
+    term = terms;
+  }
+  var termBusqueda =  new String(term).replace(' ','+');
+  console.log('ROUTER--> término aleatorio elegido al azar de la lista prefijada: ' + termBusqueda);
+
+  var predictionsDone = await discoverWTF.discover(termBusqueda, nameOfImagen);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -61,7 +73,10 @@ router.get("/discover", async (req, res) => {
 router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  var predictionsDone = await discoverWTF.discover(terminos, nameOfImagen);
+  var termBusqueda =  new String(terminos).replace(' ','+');
+  console.log('ROUTER--> término recibido de pantalla: ' + termBusqueda);
+
+  var predictionsDone = await discoverWTF.discover(termBusqueda, nameOfImagen);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");

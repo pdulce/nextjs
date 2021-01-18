@@ -1,7 +1,6 @@
 const jpeg = require('jpeg-js')
 const fs = require('fs')
 const path = require("path")
-const request = require('request')
 const cheerio = require('cheerio')
 const fetch = require('node-fetch')
 const moment = require("moment")
@@ -12,10 +11,6 @@ const tf = require('@tensorflow/tfjs')
 require('@tensorflow/tfjs-node')
 
 const mobilenet = require('@tensorflow-models/mobilenet')
-const { randomInt } = require('crypto')
-
-const terminos = ['saludo', 'guerra', 'valle', 'palacio', 'hispania', 'Antigua Roma', 'Mediterráneo', 'Europa', 'República', 'Pandemia', 
-'filosofía', 'alquimia', 'deportes', 'escalada', 'historia del arte', 'literatura', 'geografía', 'historia', 'matemáticas', 'nuevas tecnologías'];
 
 /** This function will return a Uint8Array with four channel values (RGBA) for each pixel (width * height). 
      * The MobileNet model only uses the three colour channels (RGB) for classification, ignoring the alpha channel. 
@@ -41,16 +36,7 @@ const imageToInput = (image, numChannels) => {
     return input;
   }
 
-const discover = async function(terms, imageRec){
-  var term = '';
-  if (terms == ''){
-    let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
-    term = terminos[ind];
-  }else{
-    term = terms;
-  }
-  var termBusqueda =  new String(term).replace(' ','+');
-  console.log('term aleatorio: ' + termBusqueda);
+const discover = async function(termBusqueda, imageRec){
   
   let response = await fetch(`https://www.shutterstock.com/es/search/${termBusqueda}?kw=bancos+de+fotos+libres&image_type=photo`, 
     {
