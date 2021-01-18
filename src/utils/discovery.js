@@ -70,8 +70,8 @@ const discover = async function(termBusqueda, imageRec){
   $('img[class="z_h_9d80b z_h_2f2f0"]').each((i, el) => {
     if (i == aleatorio){
       imgAlAzar = $(el). attr('src');
-      console.log(aleatorio);
-      console.log(`imagen al azar${imgAlAzar}`);
+      //console.log(aleatorio);
+      console.log(`imagen al azar ${imgAlAzar}`);
     }
   });
 
