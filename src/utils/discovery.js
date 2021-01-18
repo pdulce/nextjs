@@ -66,10 +66,11 @@ const discover = async function(termBusqueda, imageRec){
   //funciona: console.log($('div[class="z_h_b900b"]'))
   // funciona: console.log($('img[class="z_h_9d80b z_h_2f2f0"]'));
   var imgAlAzar = '';
+  var aleatorio = Math.floor((Math.random()*new moment()))%20;
   $('img[class="z_h_9d80b z_h_2f2f0"]').each((i, el) => {
-    let aleatorio = Math.floor((Math.random()*new moment()))%20;
     if (i == aleatorio){
       imgAlAzar = $(el). attr('src');
+      console.log(aleatorio);
       console.log(`imagen al azar${imgAlAzar}`);
     }
   });
