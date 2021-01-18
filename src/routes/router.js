@@ -50,14 +50,8 @@ router.get("/discovered", (req, res) => {
 
 router.get("/discover", async (req, res) => {
   
-  var term = '';
-  if (terms == ''){
-    let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
-    term = terminos[ind];
-  }else{
-    term = terms;
-  }
-  var termBusqueda =  new String(term).replace(' ','+');
+  let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
+  var termBusqueda =  new String(terminos[ind]).replace(' ','+');
   console.log('ROUTER--> término aleatorio elegido al azar de la lista prefijada: ' + termBusqueda);
 
   var predictionsDone = await discoverWTF.discover(termBusqueda, nameOfImagen);
@@ -66,7 +60,7 @@ router.get("/discover", async (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("research.html", 
   {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, 
-  terminos: '', 
+  terminos: termBusqueda, 
   imagen: nameOfImagen});
 });
 
