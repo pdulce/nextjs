@@ -66,8 +66,8 @@ router.get("/discover", async (req, res) => {
 
 router.post("/discover", async (req, res) => {
   
-  let terminos = req.body.temas;
-  var termBusqueda =  new String(terminos).replace(' ','+');
+  let termino = req.body.temas;
+  var termBusqueda =  new String(termino).replace(' ','+');
   console.log('ROUTER--> término recibido de pantalla: ' + termBusqueda);
 
   var predictionsDone = await discoverWTF.discover(termBusqueda, nameOfImagen);
@@ -76,7 +76,7 @@ router.post("/discover", async (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', 
   entry: 5, content: predictionsDone, 
-  terminos: terminos, 
+  terminos: termino, 
   imagen: nameOfImagen});
 });
 
