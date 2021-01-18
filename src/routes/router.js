@@ -74,7 +74,7 @@ router.post("/discover", async (req, res) => {
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("investmentResearch.html", {title: 'ML aplicado a búsqueda de tendencias inversión', 
+  res.render("research.html", {title: 'ML aplicado a búsqueda de tendencias inversión', 
   entry: 5, content: predictionsDone, 
   terminos: termino, 
   imagen: nameOfImagen});
