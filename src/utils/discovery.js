@@ -36,16 +36,7 @@ const imageToInput = (image, numChannels) => {
     return input;
   }
 
-const discover = async function(termBusqueda, imageRec){
-  
-  let response = await fetch(`https://www.shutterstock.com/es/search/${termBusqueda}?kw=bancos+de+fotos+libres&image_type=photo`, 
-    {
-      method: 'GET',
-      credentials: 'include'
-    }
-  );
-
-  let html = await response.text();
+function grabarEvidencia(html_){
   var pathOfHtmlReceived = path.join(__dirname, `../views/received.html`);
   if (fs.existsSync(pathOfHtmlReceived)) {
     fs.unlink(pathOfHtmlReceived, function (err){
@@ -56,26 +47,12 @@ const discover = async function(termBusqueda, imageRec){
       }*/
     });
   }
-
-  fs.writeFileSync(pathOfHtmlReceived, html);
+  fs.writeFileSync(pathOfHtmlReceived, html_);
   console.log('html saved at disk');
+}
 
-  let $ = cheerio.load(html);
-
-  //funciona: console.log($('div', '#search-results-mosaic-grid'))
-  //funciona: console.log($('div[class="z_h_b900b"]'))
-  // funciona: console.log($('img[class="z_h_9d80b z_h_2f2f0"]'));
-  var imgAlAzar = '';
-  var aleatorio = Math.floor((Math.random()*new moment()))%20;
-  $('img[class="z_h_9d80b z_h_2f2f0"]').each((i, el) => {
-    if (i == aleatorio){
-      imgAlAzar = $(el). attr('src');
-      //console.log(aleatorio);
-      console.log(`imagen al azar ${imgAlAzar}`);
-    }
-  });
-
-  var pathOfImage = path.join(__dirname, `../public/img/${imageRec}`);
+function grabarImagen(imageOnDisk, urlImagen){
+  var pathOfImage = path.join(__dirname, `../public/img/${imageOnDisk}`);
   // borro la imagen que pudiera haberse cargado previamente
   if (fs.existsSync(pathOfImage)) {
     fs.unlink(pathOfImage, function (err){
@@ -86,20 +63,56 @@ const discover = async function(termBusqueda, imageRec){
       }*/
     });
   }
-
   //busco una imagen dentro de ese html recibido
-  https.request(imgAlAzar, function(response) {                                        
+  https.request(urlImagen, function(response) {                                        
     var data = new Stream();                                                    
     response.on('data', function(chunk) {                                       
       data.push(chunk);                                                         
     });                                                                         
     response.on('end', function() {                                             
-      fs.writeFileSync(pathOfImage, data.read());                               
+      fs.writeFileSync(pathOfImage, data.read());                 
     });                                                                      
   }).end();
 
-  const model = await mobilenet.load();
-  console.log('mobilenet model charged!');
+}
+
+function seleccionarImagen(html_){
+  let $ = cheerio.load(html_);
+  var _urlimagen = '';
+  var aleatorio = Math.floor((Math.random()*new moment()))%20;
+  $('img[class="z_h_9d80b z_h_2f2f0"]').each((i, el) => {
+    if (i == aleatorio){
+      _urlimagen = $(el). attr('src');
+      //console.log(aleatorio);
+      //console.log(`imagen al azar ${imgAlAzar}`);
+    }
+  });
+  return _urlimagen;
+}
+
+const discover = async function(termBusqueda, imageOnDisk){
+
+  var pagina = (Math.floor((Math.random()*new moment()))%10) + 1;
+  let response = await fetch(`https://www.shutterstock.com/es/search/${termBusqueda}?kw=bancos+de+fotos+libres&image_type=photo&page=${pagina}`, 
+    {
+      method: 'GET',
+      credentials: 'include'
+    }
+  );
+
+  let html = await response.text();
+  
+  var _urlimagen = seleccionarImagen(html);
+  console.log(`imagen seleccionada de la www ${_urlimagen}`);        
+
+  grabarEvidencia(html);
+  console.log(`evidencia(html) grabada en disco`);
+  
+  grabarImagen(imageOnDisk, _urlimagen);
+  console.log(`imagen grabada en disco`); 
+
+  const model = await mobilenet.load()
+  //console.log('mobilenet model charged!');
   
   var jpegData = fs.readFileSync(pathOfImage);
   var imgRawData = jpeg.decode(jpegData, true);
@@ -107,7 +120,7 @@ const discover = async function(termBusqueda, imageRec){
   var input_ = imageToInput(imgRawData, 3);
   var predictions = await model.classify(input_);
 
-  console.log('prediction done!!');
+  //console.log('prediction done!!');
 
   return predictions;
 }
