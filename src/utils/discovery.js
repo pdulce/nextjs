@@ -84,6 +84,7 @@ const discover = async function(terms, imageRec){
     let aleatorio = Math.floor((Math.random()*new moment()))%20;
     if (i == aleatorio){
       imgAlAzar = $(el). attr('src');
+      console.log(`imagen al azar${imgAlAzar}`);
     }
   });
 
