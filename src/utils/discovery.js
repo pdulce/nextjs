@@ -5,6 +5,7 @@ const request = require('request')
 const cheerio = require('cheerio')
 const fetch = require('node-fetch')
 const moment = require("moment")
+const Stream = require('stream').Transform
 require('moment/locale/cs')
 const tf = require('@tensorflow/tfjs')
 // Load the binding (CPU computation)
@@ -14,7 +15,7 @@ const mobilenet = require('@tensorflow-models/mobilenet')
 const { randomInt } = require('crypto')
 
 const terminos = ['saludo', 'guerra', 'valle', 'palacio', 'hispania', 'Antigua Roma', 'Mediterráneo', 'Europa', 'República', 'Pandemia', 
-'filosofía', 'alquimia', 'deportes', 'escalada', 'historia del arte', 'literatura', 'geografía', 'historia', 'matemáticas', 'nuevas tecnologías']
+'filosofía', 'alquimia', 'deportes', 'escalada', 'historia del arte', 'literatura', 'geografía', 'historia', 'matemáticas', 'nuevas tecnologías'];
 
 /** This function will return a Uint8Array with four channel values (RGBA) for each pixel (width * height). 
      * The MobileNet model only uses the three colour channels (RGB) for classification, ignoring the alpha channel. 
@@ -40,53 +41,80 @@ const imageToInput = (image, numChannels) => {
     return input;
   }
 
-const discover = async function (terms, imageRec){
+const discover = async function(terms, imageRec){
+  var term = '';
+  if (terms == ''){
+    let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
+    term = terminos[ind];
+  }else{
+    term = terms;
+  }
+  var termBusqueda =  new String(term).replace(' ','+');
+  console.log('term aleatorio: ' + termBusqueda);
+  
+  let response = await fetch(`https://www.shutterstock.com/es/search/${termBusqueda}?kw=bancos+de+fotos+libres&image_type=photo`, 
+    {
+      method: 'GET',
+      credentials: 'include'
+    }
+  );
 
-  // vamos con los términos
-  let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
-  var term = terminos[ind];
-  console.log('term aleatorio: ' + term);
-  let response = await fetch(`https://pixabay.com/es/photos/${term}/`);// GET
   let html = await response.text();
+  var pathOfHtmlReceived = path.join(__dirname, `../views/received.html`);
+  if (fs.existsSync(pathOfHtmlReceived)) {
+    fs.unlink(pathOfHtmlReceived, function (err){
+      if (err){
+        console.log(`error borrando fichero received.html`);
+      }/*else{
+        console.log('file deleted!');
+      }*/
+    });
+  }
+
+  fs.writeFileSync(pathOfHtmlReceived, html);
+  console.log('html saved at disk');
+
   let $ = cheerio.load(html);
 
-  let divcontent = $('body').find('div', '#wrapper').find('div', '#content');
-  //console.log(divcontent.text());
-  let divcontent__= $(divcontent).find('div', 'class="media_list"').find('div', 'style="background: #f6f5fa"');
-  //console.log(divcontent__.text());
-  let divsInternos = $(divcontent__).find('div:first-child').
-                                  find('div', 'class="flex_grid credits search_results"').
-                                  find('div', 'class="item"');
-  console.log(divsInternos.text());
+  //funciona: console.log($('div', '#search-results-mosaic-grid'))
+  //funciona: console.log($('div[class="z_h_b900b"]'))
+  // funciona: console.log($('img[class="z_h_9d80b z_h_2f2f0"]'));
+  var imgAlAzar = '';
+  $('img[class="z_h_9d80b z_h_2f2f0"]').each((i, el) => {
+    let aleatorio = Math.floor((Math.random()*new moment()))%20;
+    if (i == aleatorio){
+      imgAlAzar = $(el). attr('src');
+    }
+  });
 
-  //console.log(divsInternos.attribs);
-  /*let imagenes = [];
-  for (let imagediv of divsInternos){
-    let imagen = $(imagediv).find('meta', 'itemprop="contentUrl"');
-    //imagenes.push(imagen.attr('src'));
-    console.log('imagen: '+ imagen);
+  var pathOfImage = path.join(__dirname, `../public/img/${imageRec}`);
+  // borro la imagen que pudiera haberse cargado previamente
+  if (fs.existsSync(pathOfImage)) {
+    fs.unlink(pathOfImage, function (err){
+      if (err){
+        console.log(`error borrando fichero${pathOfImage}`);
+      }/*else{
+        console.log('previous image deleted!');
+      }*/
+    });
   }
-  console.log(imagenes);*/
 
-  //let _div = $(div_).find('div').find('div').toArray()[1];//este div es el 
-  //let __divs = $(_div).find('div');//estos ya serían los elementos que buscamos, con su img dentro
- 
- /*
-
-  for (let lastDiv of __divs){
-    let imagen = $(lastDiv).find('a').find('img');
-    imagenes.push(imagen.attr('src'));
-    console.log('imagen: '+ imagen);
-  }
-  console.log("imagenes");
-  */
+  //busco una imagen dentro de ese html recibido
+  https.request(imgAlAzar, function(response) {                                        
+    var data = new Stream();                                                    
+    response.on('data', function(chunk) {                                       
+      data.push(chunk);                                                         
+    });                                                                         
+    response.on('end', function() {                                             
+      fs.writeFileSync(pathOfImage, data.read());                               
+    });                                                                      
+  }).end();
 
   const model = await mobilenet.load();
-  console.log('model charged!');
+  console.log('mobilenet model charged!');
   
-  var jpegData = fs.readFileSync(imageRec);
-  var imgRawData = jpeg.decode(jpegData, true);//a unixArray
-  //console.log(imgRawData);
+  var jpegData = fs.readFileSync(pathOfImage);
+  var imgRawData = jpeg.decode(jpegData, true);
 
   var input_ = imageToInput(imgRawData, 3);
   var predictions = await model.classify(input_);
@@ -94,7 +122,8 @@ const discover = async function (terms, imageRec){
   console.log('prediction done!!');
 
   return predictions;
-} 
+}
+
 
 
 module.exports = { discover}

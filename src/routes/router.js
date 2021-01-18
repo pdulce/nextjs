@@ -1,11 +1,8 @@
 //libraries
 const express = require("express")
 const bodyParser = require('body-parser')
-const http = require('http')
 https = require('https');
-const fs = require('fs')
 const path = require("path")
-const Stream = require('stream').Transform
 const moment = require("moment")
 require('moment/locale/cs')
 
@@ -44,48 +41,27 @@ router.get("/reporting", (req, res) => {
   res.render("reporting.html", {title: 'Informes del contrato CDISM', entry: 4});
 });
 
+router.get("/discovered", (req, res) => {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("received.html", {title: 'Informes del contrato CDISM', entry: 4});
+});
+
 router.get("/discover", async (req, res) => {
   
-  let terminos = "saludar";
-
-  var pathOfImage = path.join(__dirname, `../public/img/${nameOfImagen}`);
-  if (fs.existsSync(path)) {
-    fs.unlink(pathOfImage, function (err){
-      if (err){
-        console.log(`error borrando fichero${pathOfImage}`);
-      }else{
-        console.log('file deleted!');
-      }
-    });
-  }
-
-  // Toma imágenes alteatorias de la web: https://pixabay.com/es/
-  var url = "https://cdn.pixabay.com/photo/2016/06/17/04/26/mountain-1462655_960_720.jpg";
-  https.request(url, function(response) {                                        
-    var data = new Stream();                                                    
-    response.on('data', function(chunk) {                                       
-      data.push(chunk);                                                         
-    });                                                                         
-    response.on('end', function() {                                             
-      fs.writeFileSync(pathOfImage, data.read());                               
-    });                                                                      
-  }).end();
-
-  var predictionsDone = await discoverWTF.discover(terminos, pathOfImage);
+  var predictionsDone = await discoverWTF.discover('', nameOfImagen);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("research.html", 
   {title: 'ML aplicado a búsqueda de tendencias inversión', entry: 5, content: predictionsDone, 
-  terminos: terminos, 
+  terminos: '', 
   imagen: nameOfImagen});
 });
 
 router.post("/discover", async (req, res) => {
   
   let terminos = req.body.temas;
-  var pathOfImage = path.join(__dirname, `../public/img/${nameOfImagen}`);
-  var predictionsDone = await discoverWTF.discover(terminos, pathOfImage);
+  var predictionsDone = await discoverWTF.discover(terminos, nameOfImagen);
 
   //console.log("términos: " + terminos);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
