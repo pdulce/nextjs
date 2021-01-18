@@ -51,8 +51,8 @@ function grabarEvidencia(html_){
   console.log('html saved at disk');
 }
 
-function grabarImagen(imageOnDisk, urlImagen){
-  var pathOfImage = path.join(__dirname, `../public/img/${imageOnDisk}`);
+function grabarImagen(pathOfImage, urlImagen){
+  
   // borro la imagen que pudiera haberse cargado previamente
   if (fs.existsSync(pathOfImage)) {
     fs.unlink(pathOfImage, function (err){
@@ -92,6 +92,7 @@ function seleccionarImagen(html_){
 
 const discover = async function(termBusqueda, imageOnDisk){
 
+  var pathOfImage = path.join(__dirname, `../public/img/${imageOnDisk}`);
   var pagina = (Math.floor((Math.random()*new moment()))%10) + 1;
   let response = await fetch(`https://www.shutterstock.com/es/search/${termBusqueda}?kw=bancos+de+fotos+libres&image_type=photo&page=${pagina}`, 
     {
@@ -103,12 +104,12 @@ const discover = async function(termBusqueda, imageOnDisk){
   let html = await response.text();
   
   var _urlimagen = seleccionarImagen(html);
-  console.log(`imagen seleccionada de la www ${_urlimagen}`);        
+  console.log(`imagen seleccionada de la www: ${_urlimagen}`);        
 
   grabarEvidencia(html);
   console.log(`evidencia(html) grabada en disco`);
   
-  grabarImagen(imageOnDisk, _urlimagen);
+  grabarImagen(pathOfImage, _urlimagen);
   console.log(`imagen grabada en disco`); 
 
   const model = await mobilenet.load()
@@ -116,11 +117,11 @@ const discover = async function(termBusqueda, imageOnDisk){
   
   var jpegData = fs.readFileSync(pathOfImage);
   var imgRawData = jpeg.decode(jpegData, true);
-
+  console.log('imagen codificada');
   var input_ = imageToInput(imgRawData, 3);
   var predictions = await model.classify(input_);
 
-  //console.log('prediction done!!');
+  console.log('prediction done!!');
 
   return predictions;
 }
