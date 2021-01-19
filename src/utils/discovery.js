@@ -92,6 +92,22 @@ function seleccionarImagen(html_){
   return _urlimagen;
 }
 
+async function translatePredictions(predictions){
+  var newpredictions = new Array(predictions.length);
+  for (let i=0;i<predictions.length;i++){
+      await translate(`${predictions[i].className}`, {client: 'gtx', from: 'en', to: 'es'}).then(res => {
+        nuevaPred = new Map();//keys--> 'className', 'probability'
+        nuevaPred.className = res.text;
+        nuevaPred.probability = predictions[i].probability;
+        newpredictions.push(nuevaPred);
+        //console.log(nuevaPred.className);
+      }).catch(err => {
+        console.error(err)
+      })
+  }
+  return newpredictions;
+}
+
 const discover = async function(termBusqueda, imageOnDisk){
 
   var pathOfImage = path.join(__dirname, `../public/img/${imageOnDisk}`);
@@ -120,21 +136,12 @@ const discover = async function(termBusqueda, imageOnDisk){
   var jpegData = fs.readFileSync(pathOfImage);
   var imgRawData = jpeg.decode(jpegData, true);
   console.log('imagen decodificada');
+  
   var input_ = imageToInput(imgRawData, 3);
+  
   var predictions = await model.classify(input_);
   
-  var newpredictions = new Array(predictions.length);
-  for (let i=0;i<predictions.length;i++){
-    await translate(`${predictions[i].className}`, {client: 'gtx', from: 'en', to: 'es'}).then(res => {
-      nuevaPred = new Map();//keys--> 'className', 'probability'
-      nuevaPred.className = res.text;
-      nuevaPred.probability = predictions[i].probability;
-      newpredictions.push(nuevaPred);
-      //console.log(nuevaPred.className);
-    }).catch(err => {
-      console.error(err)
-    })
-  }
+  var newpredictions = translatePredictions(predictions);
 
   //console.log(`prediction done of ${predictions}`);
 
