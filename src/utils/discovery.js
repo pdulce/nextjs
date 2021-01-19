@@ -4,6 +4,8 @@ const path = require("path")
 const cheerio = require('cheerio')
 const fetch = require('node-fetch')
 const moment = require("moment")
+// const translate = require('google-translate-api');
+const translate = require('@vitalets/google-translate-api');
 const Stream = require('stream').Transform
 require('moment/locale/cs')
 const tf = require('@tensorflow/tfjs')
@@ -104,10 +106,10 @@ const discover = async function(termBusqueda, imageOnDisk){
   let html = await response.text();
   
   var _urlimagen = seleccionarImagen(html);
-  console.log(`imagen seleccionada de la www: ${_urlimagen}`);        
+  //console.log(`imagen seleccionada de la www: ${_urlimagen}`);        
 
-  grabarEvidencia(html);
-  console.log(`evidencia(html) grabada en disco`);
+  //grabarEvidencia(html);
+  //console.log(`evidencia(html) grabada en disco`);
   
   grabarImagen(pathOfImage, _urlimagen);
   console.log(`imagen grabada en disco`); 
@@ -117,13 +119,26 @@ const discover = async function(termBusqueda, imageOnDisk){
   
   var jpegData = fs.readFileSync(pathOfImage);
   var imgRawData = jpeg.decode(jpegData, true);
-  console.log('imagen codificada');
+  console.log('imagen decodificada');
   var input_ = imageToInput(imgRawData, 3);
   var predictions = await model.classify(input_);
+  
+  var newpredictions = new Array(predictions.length);
+  for (let i=0;i<predictions.length;i++){
+    await translate(`${predictions[i].className}`, {client: 'gtx', from: 'en', to: 'es'}).then(res => {
+      nuevaPred = new Map();//keys--> 'className', 'probability'
+      nuevaPred.className = res.text;
+      nuevaPred.probability = predictions[i].probability;
+      newpredictions.push(nuevaPred);
+      //console.log(nuevaPred.className);
+    }).catch(err => {
+      console.error(err)
+    })
+  }
 
-  console.log('prediction done!!');
+  //console.log(`prediction done of ${predictions}`);
 
-  return predictions;
+  return newpredictions;
 }
 
 
