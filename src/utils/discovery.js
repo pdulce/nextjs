@@ -149,5 +149,4 @@ const discover = async function(termBusqueda, imageOnDisk){
 }
 
 
-
-module.exports = { discover}
+module.exports = { discover }
