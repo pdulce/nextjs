@@ -170,7 +170,7 @@ router.post("/fileupload", async (req, res) => {
     fs.rename(oldpath, newpath, function (err) {
       if (err) {
         res.render( "formwupload.html", {title: 'Error: el fichero no pudo subirse al servidor', entry: 7});
-        throw err;
+        //throw err;
       }else{
         res.render( "formwupload.html", {title: '¡Fichero subido al servidor!', entry: 7});
       }
