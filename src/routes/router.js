@@ -153,9 +153,14 @@ router.post("/informePPTX", async (req, res) => {
 /**  forma simple de hacer un upload de un fichero */
 
 router.get("/uploadForm", async (req, res) => {
+  //leemos el contenido del directorio /public/generated/
+
+  var dirmp3 = path.join(__dirname, "../public/generated");
+  var listamp3 = fs.readdirSync(dirmp3);
+
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render( "formwupload.html", 
-  {title: 'Adjunte un fichero .pdf', entry: 7});
+  {title: 'Adjunte un fichero .pdf', converted: '#', listamp3: listamp3, entry: 7});
  
 });
 
@@ -165,12 +170,17 @@ router.post("/fileupload", async (req, res) => {
   form.parse(req, function (err, fields, files) {
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
+
+    //leemos el contenido del directorio /public/generated/
+    var dirmp3 = path.join(__dirname, "../public/generated");
+    var listamp3 = fs.readdirSync(dirmp3);
     
     var oldpath = files.filetoupload.path;
     var newpath = path.join(__dirname, `../public/uploads/${files.filetoupload.name}`);
     var ext = path.extname(newpath);
     if (ext !== ".pdf") {
-      res.render( "formwupload.html", {title: `Error: el fichero ${newpath} no tiene extensión .pdf`, entry: 7});
+      res.render( "formwupload.html", {title: `Error: el fichero ${newpath} no tiene extensión .pdf`, 
+      converted: '#', listamp3: listamp3, entry: 7});
       return;
     }
 
@@ -183,8 +193,8 @@ router.post("/fileupload", async (req, res) => {
 
                           /*** */
         /**** procesar PDF para generar audio file */
-        //let outputfile = path.join(__dirname, `../public/generated/${files.filetoupload.path.replace('\.pdf', '')}_.txt`);
-
+        
+        var onlyName = path.basename(newpath).split('.')[0];
         extract(newpath, { splitPages: false }, async function (err, pages) {
           if (err) {
             console.log('error al extraer contenido del pdf');
@@ -192,38 +202,37 @@ router.post("/fileupload", async (req, res) => {
             return;
           }
           
-          let outputTxt = path.join(__dirname, `../public/generated/prueba_.txt`);
+          let outputTxt = path.join(__dirname, `../public/intermediated/_${onlyName}.txt`);
+          let outputMp3 = path.join(__dirname, `../public/generated/${onlyName}.mp3`);
           fs.writeFileSync(outputTxt, '');
           fs.open(outputTxt, 'w', (err, fd) => {
             if (err) throw err;
             let byteswritten = 0;
             for (let i=0;i<pages.length;i++){
-              fs.writeSync(fd, pages[i]/*, 0, pages[i].length*//*, byteswritten*/);
+              fs.writeSync(fd, pages[i]);
               byteswritten += pages[i].length;
             }
+            console.log(`byteswritten ${byteswritten}`)
             fs.close(fd, (err) => {
               if (err) throw err;
             });
+
+            let gttsVoice = new gtts(fs.readFileSync(outputTxt, 'utf-8'), 'es-es');//"es" o "es-es"
+            
+            gttsVoice.save(outputMp3, function (err, result) {
+              if (err) {
+                fs.unlinkSync(outputMp3);
+                console.log("An error takes place in generating the audio");
+              }
+              console.log('fichero mp3 grabado en disco!');
+            });
+
           });
-
-          console.log(fs.readFileSync(outputTxt, 'utf-8'));
-          /*console.log(
-          var gttsVoice = new gtts(fs.readFileSync(outputfile, 'utf-8'), 'es-es');//"es" o "es-es"
-
-          outputFilePath = path.join(__dirname, `../public/generated/nnn.mp3`);
-
-          gttsVoice.save(outputFilePath, function (err, result) {
-            if (err) {
-              fs.unlinkSync(outputFilePath)
-              res.send("An error takes place in generating the audio")
-            }
-            res.json({
-              path: outputFilePath,
-            })
-          })*/
+          
         });
         /**** */
-        res.render( "formwupload.html", {title: '¡Fichero subido al servidor!', entry: 7});
+        res.render( "formwupload.html", {title: `¡Fichero ${onlyName} subido al servidor!`, 
+        converted:`${onlyName}.mp3`, listamp3: listamp3, entry: 7});
         console.log('fichero subido al server...');
       }
     });
