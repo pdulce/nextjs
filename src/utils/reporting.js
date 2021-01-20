@@ -319,6 +319,7 @@ var genReportPPTX = function (records){
 
 var genJSONReportPPTX = function (records){
   var mapa = new Map();//keys: 'categories', 'series');
+  mapa.series = new Array(), mapa.categories= new Array();
   var bloques = new StringBuffer();
   var proyectoAux = '', areaAux = '', situacionAux = '';
  
@@ -341,6 +342,8 @@ var genJSONReportPPTX = function (records){
             
       bloques.append("\n\n");
       bloques.append(proyectoAux);
+      mapa.categories.push(proyectoAux);
+
       bloques.append("\n\n");
       bloques.append("\t" + areaAux);
       bloques.append("\n\n");
@@ -368,8 +371,8 @@ var genJSONReportPPTX = function (records){
     bloques.append("\t\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_).append("\n");
     
   }//for
-  mapa.categories = bloques.toString();
-  mapa.series = ['blanco', 'negro'];
+  //mapa.series bloques.toString();
+  console.log(mapa.categories);
   return mapa;//bloques.toString();
 }
 

@@ -12,11 +12,9 @@
 
 <body>
 
-    <link rel="import" href="partials/navigation.html">
-
 <div>
     <figure class="highcharts-figure">
-        <div id="containerHC"></div>
+        <div id="container"></div>
         <p class="highcharts-description">
             A basic column chart compares requests among several IT applications.
         </p>
@@ -24,12 +22,12 @@
 </div>
 
 <script>
-Highcharts.chart('containerHC', {
+Highcharts.chart('container', {
     chart: {
         type: 'column'
     },
     title: {
-        text: 'titleeee'
+        text: '<%=title%>'
     },
     subtitle: {
         text: 'Source: WorldClimate.com'
@@ -42,12 +40,7 @@ Highcharts.chart('containerHC', {
             'SANI',
             'PRES',
             'FAMA',
-            'MOVI',
-            'OBIS',
-            'WSRT',
-            'GFOA',
-            'LADA',
-            'MEGA'
+            'MOVI'
         ],
         crosshair: true
     },
@@ -73,11 +66,11 @@ Highcharts.chart('containerHC', {
     },
     series: [{
         name: 'Peticiones en área AT',
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
 
     }, {
         name: 'Peticiones en área DG',
-        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0]
 
     }]
 });
