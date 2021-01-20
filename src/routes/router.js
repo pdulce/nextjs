@@ -155,101 +155,82 @@ router.post("/informePPTX", async (req, res) => {
 router.get("/uploadForm", async (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render( "formwupload.html", 
-  {title: 'Adjunte un fichero', entry: 7});
+  {title: 'Adjunte un fichero .pdf', entry: 7});
  
 });
 
 router.post("/fileupload", async (req, res) => {
-  console.log('procesando fichero...');
+  
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
+
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     
     var oldpath = files.filetoupload.path;
     var newpath = path.join(__dirname, `../public/uploads/${files.filetoupload.name}`);
-    fs.rename(oldpath, newpath, function (err) {
-      if (err) {
-        res.render( "formwupload.html", {title: 'Error: el fichero no pudo subirse al servidor', entry: 7});
-        //throw err;
-      }else{
-        res.render( "formwupload.html", {title: '¡Fichero subido al servidor!', entry: 7});
-      }
-    });
-  });
-});
-/***/
-
-const pdfFilter = function (req, file, callback) {
-  var ext = path.extname(file.originalname);
-  if (ext !== ".pdf") {
-    return callback("This Extension is not supported");
-  }
-  callback(null, true);
-};
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-
-router.get("/pdftoaudio", (req, res) => {
-  res.render("pdftoaudio", {
-    title:
-      "FREE PDF to Audio Mp3 Online Tool | Convert PDF Text to Audio Mp3 Online - FreeMediaTools.com",
-  });
-});
-
-var pdftoaudioupload = multer({
-  storage: storage,
-  fileFilter: pdfFilter,
-}).single("file");
-
-router.post("/uploadpdftoaudio", (req, res) => {
-  pdftoaudioupload(req, res, function (err) {
-    if (err) {
-      return res.end("Error uploading file.");
-    }
-    console.log('uploaded file to disk');
-    res.json({
-      path: req.file.path,
-    });
-  });
-});
-
-router.post("/pdftoaudio", (req, res) => {
-  outputfile = Date.now() + "output.txt"
-  extract(req.body.path, { splitPages: false }, function (err, text) {
-    if (err) {
-      console.dir(err);
+    var ext = path.extname(newpath);
+    if (ext !== ".pdf") {
+      res.render( "formwupload.html", {title: `Error: el fichero ${newpath} no tiene extensión .pdf`, entry: 7});
       return;
     }
-    console.log(text);
-    fs.writeFileSync(outputfile, text);
 
-    console.log(fs.readFileSync(outputfile,'utf-8'));
-
-    var gttsVoice = new gtts(fs.readFileSync(outputfile,'utf-8'), req.body.language);
-
-    outputFilePath = Date.now() + "output.mp3";
-
-    gttsVoice.save(outputFilePath, function (err, result) {
+    fs.rename(oldpath, newpath, function (err) {
+      
       if (err) {
-        fs.unlinkSync(outputFilePath);
-        res.send("An error takes place in generating the audio");
+        console.log('Error: el fichero no pudo leerse para conversión a texto');
+        throw err;
+      }else{
+
+                          /*** */
+        /**** procesar PDF para generar audio file */
+        //let outputfile = path.join(__dirname, `../public/generated/${files.filetoupload.path.replace('\.pdf', '')}_.txt`);
+
+        extract(newpath, { splitPages: false }, async function (err, pages) {
+          if (err) {
+            console.log('error al extraer contenido del pdf');
+            console.dir(err);
+            return;
+          }
+          
+          let outputTxt = path.join(__dirname, `../public/generated/prueba_.txt`);
+          fs.writeFileSync(outputTxt, '');
+          fs.open(outputTxt, 'w', (err, fd) => {
+            if (err) throw err;
+            let byteswritten = 0;
+            for (let i=0;i<pages.length;i++){
+              fs.writeSync(fd, pages[i]/*, 0, pages[i].length*//*, byteswritten*/);
+              byteswritten += pages[i].length;
+            }
+            fs.close(fd, (err) => {
+              if (err) throw err;
+            });
+          });
+
+          console.log(fs.readFileSync(outputTxt, 'utf-8'));
+          /*console.log(
+          var gttsVoice = new gtts(fs.readFileSync(outputfile, 'utf-8'), 'es-es');//"es" o "es-es"
+
+          outputFilePath = path.join(__dirname, `../public/generated/nnn.mp3`);
+
+          gttsVoice.save(outputFilePath, function (err, result) {
+            if (err) {
+              fs.unlinkSync(outputFilePath)
+              res.send("An error takes place in generating the audio")
+            }
+            res.json({
+              path: outputFilePath,
+            })
+          })*/
+        });
+        /**** */
+        res.render( "formwupload.html", {title: '¡Fichero subido al servidor!', entry: 7});
+        console.log('fichero subido al server...');
       }
-      res.json({
-        path: outputFilePath,
-      });
     });
   });
+
 });
+/***/
 
 router.get("/download", (req, res) => {
   var pathoutput = req.query.path;
