@@ -1,7 +1,6 @@
 //libraries
 const express = require("express")
 const bodyParser = require('body-parser')
-https = require('https')
 const fs = require('fs')
 const path = require("path")
 const multer = require("multer")
@@ -50,12 +49,6 @@ router.get("/reporting", (req, res) => {
   res.render("reporting.html", {title: 'Informes del contrato CDISM', entry: 4});
 });
 
-/*for testing purpose 
-router.get("/discovered", (req, res) => {
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("received.html", {title: 'Informes del contrato CDISM', entry: 4});
-});*/
-
 router.get("/discover", async (req, res) => {
   
   let ind = Math.floor( (Math.random()*new moment()))%terminos.length;
@@ -96,8 +89,8 @@ router.get("/gedeones", (req, res) => {
 router.post("/genCUBO", async (req, res) => {
  
   var data = [];
-  records = await moduleReporter.queryReportCUBO(data);
-  bloques = moduleReporter.genReportCUBO(records);
+  let records = await moduleReporter.queryReportCUBO(data);
+  let bloques = moduleReporter.genReportCUBO(records);
 
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   res.write(bloques);
@@ -123,8 +116,8 @@ router.post("/caducanSoon", async (req, res) => {
   let diasfin = req.body.diasfin;
     
   var data = [];
-  records = await moduleReporter.queryReportCaducadas(diasfin, data);
-  bloques = moduleReporter.genReportCaducadas(records, diasfin);
+  let records = await moduleReporter.queryReportCaducadas(diasfin, data);
+  let bloques = moduleReporter.genReportCaducadas(records, diasfin);
   
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
   
@@ -141,14 +134,30 @@ router.post("/informePPTX", async (req, res) => {
     //console.log(`fecha desde: ${fechaDesde}`);
 
     var data = [];
-    records = await moduleReporter.queryReportPPTX(fechaDesde, data);
-    bloques = moduleReporter.genReportPPTX(records);
+    let records = await moduleReporter.queryReportPPTX(fechaDesde, data);
+    let bloques = moduleReporter.genReportPPTX(records);
         
     res.setHeader("Content-Type", "text/plain; charset=UTF-8");
     res.write(bloques);
     res.end();
 });
 
+router.post("/graphPPTX", async (req, res) => {
+  let fechaDesde = req.body.fecultimoComite;
+    if (fechaDesde == ''){
+      fechaDesde = moment().format("yyyy-MM-DD");
+    }
+    //console.log(`fecha desde: ${fechaDesde}`);
+
+    var data = [];
+    let records = await moduleReporter.queryReportPPTX(fechaDesde, data);
+    let mapa = moduleReporter.genJSONReportPPTX(records);
+        
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.render( "reportComite.html", {title: 'Report con Highcharts', json: mapa.series});
+    //res.write(bloques);
+    //res.end();
+});
 
 /**  forma simple de hacer un upload de un fichero */
 

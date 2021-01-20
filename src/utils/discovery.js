@@ -1,5 +1,6 @@
 const jpeg = require('jpeg-js')
 const fs = require('fs')
+const https = require('https')
 const path = require("path")
 const cheerio = require('cheerio')
 const fetch = require('node-fetch')

@@ -50,10 +50,10 @@
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
                 <br>
-                <form action="/informePPTX" method="POST">
+                <form name="pptx" action="/informePPTX" method="POST">
                     <div class="mb-6">
                         <label for="fecultimoComite" class="form-label">Fecha último Comité Seguimiento</label>
-                        <input size="12" type="text" class="form-control" name="fecultimoComite" id="fecultimoComite" aria-describedby="fecultimoComiteHelp" readonly>
+                        <input size="12" type="text" class="form-control" value="2021-01-01" name="fecultimoComite" id="fecultimoComite" aria-describedby="fecultimoComiteHelp" readonly>
                         <div id="fecultimoComiteHelp" class="form-text">formato <i>yyyy-mm-dd</i></div>
                         <script type="text/javascript">
                             $("#fecultimoComite").datetimepicker({
@@ -62,6 +62,7 @@
                         </script>
                     </div>
                     <button type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
+                    <button onClick="javascript:document.getElementsByName('pptx')[0].action='/graphPPTX';" type="submit" class="btn btn-primary"><i class="fab fa-youtube fa-2x"></i></button>
                 </form>
             </div>
            

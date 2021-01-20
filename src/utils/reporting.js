@@ -1,9 +1,12 @@
+const fs = require('fs')
+const path = require("path")
 const StringBuffer = require("stringbuffer")
 const moment = require("moment")
 require('moment/locale/cs')
 const sqlite3 = require("sqlite3").verbose()
 
-const databaseFile = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
+const databaseFile = path.join(__dirname, "../../resources/factUTEDBLite.db");
+//"C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\data\\sqlite\\factUTEDBLite.db";
 const monthList = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
 
 var queryReportCUBO = function (arr) {
@@ -314,4 +317,60 @@ var genReportPPTX = function (records){
   return bloques.toString();
 }
 
-module.exports = {queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, queryReportCaducadas, genReportCaducadas}
+var genJSONReportPPTX = function (records){
+  var mapa = new Map();//keys: 'categories', 'series');
+  var bloques = new StringBuffer();
+  var proyectoAux = '', areaAux = '', situacionAux = '';
+ 
+  //bloques.append("Número total de actividades realizadas: " + records.length);
+  //bloques.append("\n");
+
+  for (let i = 0; i < records.length; i++) {
+    var splitter_ = records[i].split("|");
+    //${row.Proyecto} | ${row.area} | ${row.situacion} | ${row.Cod_GEDEON} | ${row.desc}
+    var proyecto_ = splitter_[0];
+    var area_ = splitter_[1];
+    var situacion_ = splitter_[2];
+    var codGedeon_ = splitter_[3];
+    var descGedeon_ = splitter_[4];
+
+    if (proyectoAux == '' || proyecto_ != proyectoAux){
+      proyectoAux = proyecto_;
+      areaAux = area_;
+      situacionAux = situacion_;
+            
+      bloques.append("\n\n");
+      bloques.append(proyectoAux);
+      bloques.append("\n\n");
+      bloques.append("\t" + areaAux);
+      bloques.append("\n\n");
+      bloques.append("\t\t" + situacionAux);
+      bloques.append("\n\n");
+    }
+    
+    //llenamos el bloque actual
+    if (area_ != areaAux){
+      areaAux = area_;
+      situacionAux = situacion_;
+      bloques.append("\n");
+      bloques.append("\t" + areaAux);
+      bloques.append("\n\n");
+      bloques.append("\t\t" + situacionAux);
+      bloques.append("\n\n");
+    }
+    if (situacion_ != situacionAux){
+      situacionAux = situacion_;
+      bloques.append("\n");
+      bloques.append("\t\t" + situacionAux);
+      bloques.append("\n\n");
+    }
+
+    bloques.append("\t\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_).append("\n");
+    
+  }//for
+  mapa.categories = bloques.toString();
+  mapa.series = ['blanco', 'negro'];
+  return mapa;//bloques.toString();
+}
+
+module.exports = {queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, genJSONReportPPTX, queryReportCaducadas, genReportCaducadas}
