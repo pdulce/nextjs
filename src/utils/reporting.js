@@ -98,9 +98,9 @@ var genReportCUBO = function(records){
 
 var queryCertifMensualAT = function (arr) {
   var db = new sqlite3.Database(databaseFile);
-  var myQuery = "SELECT i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE ("+
-  "(date(i99.Fecha_de_tramitacion) between date('now','start of month','-1 month') AND date('now','start of month','-1 day'))  OR"+
-  "(date(i99.fecha_estado_modif) between date('now','start of month','-1 month') AND date('now','start of month','-1 day'))"+
+  var myQuery = "SELECT i99.Proyecto_ID as Proyecto, i99.id as Cod_GEDEON, i99.Titulo as desc, date(i99.Fecha_de_tramitacion) as fechatram FROM incidenciasProyecto i99 LEFT OUTER JOIN subdireccion s74 ON s74.id=i99.Unidad_origen LEFT OUTER JOIN servicio s68 ON s68.id=i99.Area_origen  WHERE ("+
+  "(date(i99.Fecha_de_tramitacion) between date('now','start of month','-1 month') AND date('now')) "+
+  "OR (Estado LIKE '%curso%')"+
   ") AND "+
     "("+
       "(i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR "+
@@ -115,7 +115,7 @@ var queryCertifMensualAT = function (arr) {
       }
       rows.forEach(function (row, index) {
         //${index}->
-        arr.push(`${row.Proyecto} | ${row.Cod_GEDEON} | ${row.desc}`);
+        arr.push(`${row.Proyecto} | ${row.Cod_GEDEON} | ${row.desc} | [${row.fechatram}]`);
       });
       resolve(arr);
     });//end of db.all
@@ -138,6 +138,7 @@ var genCertifMensualAT = function (records, mesCertificado){
     var proyecto_ = splitter_[0];
     var codGedeon_ = splitter_[1];
     var descGedeon_ = splitter_[2];
+    var fechatram = splitter_[3];
     if (proyectoAux == '' || proyecto_ != proyectoAux){
       numPeticionesMes = 0;
       proyectoAux = proyecto_;
@@ -148,7 +149,7 @@ var genCertifMensualAT = function (records, mesCertificado){
     }
     
     //llenamos el bloque actual
-    bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
+    bloques.append("-  ").append(fechatram).append(codGedeon_).append(" - ").append(descGedeon_);
     bloques.append("\n"); 
     numPeticionesMes++;
   }//for 
@@ -317,14 +318,108 @@ var genReportPPTX = function (records){
   return bloques.toString();
 }
 
+var generarGraficoJSON = function (){
+  /*var configuration = {
+    type: 'bar',
+    data: {
+        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+        datasets: [{
+                label: 'Scored',
+                data: [2478,5267,734,784,433],
+                        backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+    }]},
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                precision:0,
+                beginAtZero: true
+                }
+            }]
+        }
+    }
+  }*/
+ 
+  var configuration = {
+    type: 'pie', 
+    data: {
+        labels: ["ANALISIS (93.60%)", "PRUEBAS (6.40%)"],//, "SOPORTE (20.68%)"],
+        datasets: [{
+                label: 'Horas dedicación', //'Scored',
+                data: //[(123.5+104)+(57+33.75),(222.75+192.65),(99+23)+(56.25+54.15)], /**FOM2 */
+                      [26+ 3.25, 2], /**FRMA */
+                      //[(150+235)+0, 58,(87.5+28)], /**SANI */
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+    }]},
+    options: {
+      responsive: true
+    }
+  }
+
+  return configuration
+}
+
+
 var genJSONReportPPTX = function (records){
   var mapa = new Map();//keys: 'categories', 'series');
   mapa.series = new Array(), mapa.categories= new Array();
+
   var bloques = new StringBuffer();
   var proyectoAux = '', areaAux = '', situacionAux = '';
  
-  //bloques.append("Número total de actividades realizadas: " + records.length);
-  //bloques.append("\n");
+  /** generar esta estructura de salida:
+   * 
+   * series: [
+      {
+        name: 'Peticiones en curso - Area AT',
+        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
+    }, {
+        name: 'Peticiones en curso - Area DG',
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0]
+
+    },
+    {
+        name: 'Peticiones sin comenzan - Area DG',
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0]
+
+    },
+      name: 'Peticiones sin comenzan - Area AT',
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0]
+
+    }]
+   */
 
   for (let i = 0; i < records.length; i++) {
     var splitter_ = records[i].split("|");
@@ -342,7 +437,7 @@ var genJSONReportPPTX = function (records){
             
       bloques.append("\n\n");
       bloques.append(proyectoAux);
-      mapa.categories.push(proyectoAux);
+      mapa.categories.push(`${proyectoAux}`);
 
       bloques.append("\n\n");
       bloques.append("\t" + areaAux);
@@ -371,9 +466,9 @@ var genJSONReportPPTX = function (records){
     bloques.append("\t\t\t- ").append(codGedeon_).append(" - ").append(descGedeon_).append("\n");
     
   }//for
-  //mapa.series bloques.toString();
+ 
   console.log(mapa.categories);
-  return mapa;//bloques.toString();
+  return mapa;
 }
 
-module.exports = {queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, genJSONReportPPTX, queryReportCaducadas, genReportCaducadas}
+module.exports = {generarGraficoJSON, queryReportCUBO, genReportCUBO, queryCertifMensualAT, genCertifMensualAT, queryReportPPTX, genReportPPTX, genJSONReportPPTX, queryReportCaducadas, genReportCaducadas}

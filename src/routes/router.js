@@ -7,22 +7,24 @@ const multer = require("multer")
 const gtts = require("gtts")
 const extract = require("pdf-text-extract")
 const formidable = require('formidable')
+const QuickChart = require('quickchart-js');
 const moment = require("moment")
 require('moment/locale/cs')
 
 //begin of definition of my own modules
 const moduleReporter = require('../utils/reporting')
 const discoverWTF = require('../utils/discovery')
+//const StringBuffer = require("stringbuffer")
 //end of definition of my own modules
 
+//constants
 const nameOfImagen = 'newImage.jpg'
 const terminos = ['saludo', 'guerra', 'valle', 'palacio', 'hispania', 'Antigua Roma', 'Mediterráneo', 'Europa', 'República', 'Pandemia', 
 'filosofía', 'alquimia', 'deportes', 'escalada', 'historia del arte', 'literatura', 'geografía', 'historia', 'matemáticas', 'nuevas tecnologías']
-
-//constants
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
+
 
 router.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -99,7 +101,7 @@ router.post("/genCUBO", async (req, res) => {
 
 router.post("/genCertMensualAT", async (req, res) => {
   
-  var mesCertificado = moment().subtract(1, 'month').format("MM");
+  var mesCertificado = moment().subtract(-1, 'month').format("MM");
   //console.log(mesCertificado);
   
   var data = [];
@@ -152,12 +154,30 @@ router.post("/graphPPTX", async (req, res) => {
     var data = [];
     let records = await moduleReporter.queryReportPPTX(fechaDesde, data);
     let mapa = moduleReporter.genJSONReportPPTX(records);
-        
+    
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.render( "reportComite.html", {title: 'Report con Highcharts', json: mapa.series});
-    //res.write(bloques);
-    //res.end();
+    res.render( "reportComite.html", {title: 'Report con Highcharts'});
+
 });
+
+router.post("/fastgraph", async (req, res) =>{
+
+  let configuration = moduleReporter.generarGraficoJSON();
+  const myChart = new QuickChart();
+  myChart
+    .setConfig(configuration)
+    .setWidth(800)
+    .setHeight(600)
+    .setBackgroundColor('white'/*'transparent'*/);
+
+  // Print the chart URL
+  console.log(myChart.getUrl());
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("report.html", {title: 'Genere su gráfico', 
+  entry: 5, graphiourl: myChart.getUrl()});
+
+})
 
 /**  forma simple de hacer un upload de un fichero */
 
