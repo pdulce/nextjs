@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html>   
- 
-<%- include ('partials/head.html') %>
-  
-<body>
-    <%- include ('partials/navigation.html') %>
-    
-    <div class="p-5">
-        <div class="row">
-                <div class="col">col11</div>
-                <div class="col">col12</div>
-        </div>
-        <div class="row">
-            <div class="col">col21</div>
-            <div class="col">col22</div>
-        </div>
-    </div>
+import { useRouter } from "next/router";
+import Components from "./partials/Components";
+import Navmenu from "./partials/Navigation";
+import styles from "../styles/Home.module.css";
 
-    <h3> Contacto e-mail me!! </h3>
-    <br/>
-    <h4><%= title %></h4>
-    
-    <%-include ('partials/footer.html'); %>
-    
-</body>     
-</html>  
+const Contact = () => {
+  const router = useRouter();
+  const { menuentry } = router.query;
+
+  return (
+    <div className={styles.container}>
+      <Components>
+        <title>Site academy</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Components>
+      <Navmenu></Navmenu>
+
+      <main className={styles.main}>
+        <p>Menuentry param passed: {menuentry}</p>
+      </main>
+    </div>
+  );
+};
+
+export default Contact;

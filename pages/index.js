@@ -1,20 +1,18 @@
-import Components from './partials/Components'
-import Navmenu from './partials/Navigation'
-import styles from '../styles/Home.module.css'
+import Components from "./partials/Components";
+import Navmenu from "./partials/Navigation";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   return (
     <div className={styles.container}>
-
       <Components>
         <title>Site academy</title>
         <link rel="icon" href="/favicon.ico" />
       </Components>
-     
-      <main className={styles.main}>
-        
-        <Navmenu></Navmenu>
 
+      <Navmenu></Navmenu>
+
+      <main className={styles.main}>
         <h1 className={styles.title}>
           Bienvenido a <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -33,15 +31,16 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-         Mi site en WWW
+          Mi site en WWW
         </a>
       </footer>
     </div>
-  )
+  );
 }
 
-<style jsx>{`
-    .button{
+<style jsx>
+  {`
+    .button {
       background-color: #4caf50;
       width: 100%;
       color: orange;
@@ -49,11 +48,9 @@ export default function Home() {
       margin: 10px 0px;
       border: none;
       cursor: pointer;
-     }
-     .form {
+    }
+    .form {
       border: 3px solid #f1f1f1;
-     }
-
-`}
-
-</style>
+    }
+  `}
+</style>;

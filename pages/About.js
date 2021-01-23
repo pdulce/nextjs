@@ -1,15 +1,25 @@
-function About() {
-    return <div>About</div>
-  }
+import { useRouter } from "next/router";
+import Components from "./partials/Components";
+import Navmenu from "./partials/Navigation";
+import styles from "../styles/Home.module.css";
 
-  // This also gets called at build time
-export async function getStaticProps({ params }) {
-    // params contains the post `id`.
-}
+const About = () => {
+  const router = useRouter();
+  const { menuentry } = router.query;
 
-// This gets called on every request
-export async function getServerSideProps() {
+  return (
+    <div className={styles.container}>
+      <Components>
+        <title>Site academy</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Components>
+      <Navmenu></Navmenu>
 
-}
-  
-export default About
+      <main className={styles.main}>
+        <p>Menuentry param passed: {menuentry}</p>
+      </main>
+    </div>
+  );
+};
+
+export default About;
