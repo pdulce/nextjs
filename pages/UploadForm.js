@@ -3,7 +3,8 @@ import Components from "./partials/Components";
 import Navmenu from "./partials/Navigation";
 import styles from "../styles/Home.module.css";
 
-const Contact = (req, res) => {
+const UploadForm = (req, res) => {
+
   const router = useRouter();
   const { menuentry } = router.query;
   if (req.method === "POST") {//como recoger parámetros qeu vengan en el body en lugar de la url, de la request
@@ -29,7 +30,20 @@ const Contact = (req, res) => {
       <Navmenu></Navmenu>
 
       <main className={styles.main}>
-        <p>Menuentry param passed: {menuentry}</p>
+        <form action="/fileupload" method="post" enctype="multipart/form-data">
+          <input type="file" name="filetoupload"></input><br/>
+          <input type="submit"></input>
+        </form>
+        <br/>
+        <h4><a href="generated/paramreceived">Último fichero de audio convertido a partir del PDF procesado</a></h4>
+        <br></br>
+        <br></br>
+          <h4>Ficheros de audio ya convertidos</h4>
+          <ul>
+           for (let i = 0; i < listamp3.length; i++)
+               <li> <a href="generated/gen-i">gen i-esimo</a></li>
+           end-for
+          </ul>
       </main>
 
       <footer className={styles.footer}>
@@ -45,4 +59,4 @@ const Contact = (req, res) => {
   );
 };
 
-export default Contact;
+export default UploadForm;
