@@ -1,28 +1,33 @@
-import Components from "../partials/Components"
-import Navmenu from "../partials/Navigation"
-import Footer from "../partials/Footer"
-import styles from "../../styles/Home.module.css"
+import Components from "../partials/Components";
+import Navmenu from "../partials/Navigation";
+import Footer from "../partials/Footer";
+const moment = require("moment");
+require("moment/locale/cs");
+import styles from "../../styles/Home.module.css";
 
-const moduleReporter = require("../api/reportutils")
-
+const moduleReporter = require("../api/reportutils");
 
 /****en esta funcion haz todo el cómputo en el servidor, para dejarlo disponible en el return () que pinta el html-componente-page */
 export async function getStaticProps({ params }) {
-  console.log(params);
+  //console.log(params);
+  var mesInicial = moment().subtract(2, "month").format("MM");
+  var mesFinal = moment().subtract(1, "month").format("MM"); //otros formatos de salida "YYYY MM DD
   var data = [];
-  let records = await moduleReporter.queryReportCUBO(data);
-  //console.log(`records ${records}`);
-  //console.log(`data ${data}`);
+  let records = await moduleReporter.queryReportCUBO(
+    data,
+    mesInicial,
+    mesFinal
+  );
   let bloques = moduleReporter.genReportCUBO(records);
-  //console.log(bloques);
+
+  var resumen = `Número total de actividades realizadas: ${records.length}`;
 
   return {
-    props: { bloques }
+    props: { bloques, resumen },
   };
 }
 
 const GenCUBO = (props) => {
- 
   //console.log(props);
 
   return (
@@ -33,11 +38,20 @@ const GenCUBO = (props) => {
       </Components>
       <Navmenu></Navmenu>
       <main className={styles.main}>
-         <p>{props.bloques}</p>
+        <p><h5>{props.resumen}</h5></p>
+
+        <ul>
+          {props.bloques.map(({ code, desc }) => (
+            <li key={code}>
+              {desc} : {desc}
+            </li>
+          ))}
+        </ul>
+       
       </main>
       <Footer></Footer>
     </div>
   );
 };
 
-export default GenCUBO
+export default GenCUBO;

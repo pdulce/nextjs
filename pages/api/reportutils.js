@@ -49,17 +49,14 @@ var queryReportCUBO = function (arr) {
   }); //end of Promise
 }; //end of genReportCUBO
 
-var genReportCUBO = function (records) {
-  var mesInicial = moment().subtract(2, "month").format("MM");
-  var mesFinal = moment().subtract(1, "month").format("MM"); //otros formatos de salida "YYYY MM DD
+var genReportCUBO = function (records, mesInicial, mesFinal) {
   var bloques = new StringBuffer();
   var proyectoAux = "",
     mesAux = "";
   var numPeticionesMes1 = 0,
     numPeticionesMes2 = 0;
 
-  bloques.append("Número total de actividades realizadas: " + records.length);
-  bloques.append("\n");
+  var historiaProyectos = []; // empty Object
 
   for (let i = 0; i < records.length; i++) {
     var splitter_ = records[i].split("|");
@@ -67,6 +64,7 @@ var genReportCUBO = function (records) {
     var mes_ = splitter_[1];
     var codGedeon_ = splitter_[2];
     var descGedeon_ = splitter_[3];
+
     if (proyectoAux == "" || proyecto_ != proyectoAux) {
       if (proyectoAux != "") {
         var numPets1EnLiteral =
@@ -81,38 +79,44 @@ var genReportCUBO = function (records) {
             : numPeticionesMes2 == 1
             ? " una actividad en "
             : ` ${numPeticionesMes2} actividades en `;
-        bloques
-          .append("\nResumen ")
-          .append("=>")
-          .append(numPets1EnLiteral)
-          .append(monthList[parseInt(mesInicial) - 1]);
-        bloques
-          .append(" y")
-          .append(numPets2EnLiteral)
-          .append(monthList[parseInt(mesFinal) - 1]);
-        bloques.append("\n");
+        let resumen =
+          " Resumen =>" +
+          numPets1EnLiteral +
+          monthList[parseInt(mesInicial) - 1] +
+          " y" +
+          numPets2EnLiteral +
+          monthList[parseInt(mesFinal) - 1];
+        bloques.append(resumen);
       }
       numPeticionesMes1 = 0;
       numPeticionesMes2 = 0;
       proyectoAux = proyecto_;
       mesAux = mes_;
 
-      bloques.append("\n\n");
+      //historiaProyectos['item'] = [];
+
+      bloques.append("<br/><br/>");
       bloques.append(proyectoAux);
-      bloques.append("\n\n");
+      bloques.append("<br/><br/>");
       bloques.append(monthList[parseInt(mesAux) - 1]);
-      bloques.append("\n");
+      bloques.append("<br/>");
     }
 
     //llenamos el bloque actual
     if (mes_ != mesAux) {
       mesAux = mes_;
-      bloques.append("\n");
+      bloques.append("<br/>");
       bloques.append(monthList[parseInt(mesAux) - 1]);
-      bloques.append("\n");
+      bloques.append("<br/>");
     }
     bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
-    bloques.append("\n");
+
+    var data_iesima = {
+      project: proyectoAux,
+      code: codGedeon_,
+      desc: descGedeon_,
+    };
+    historiaProyectos.push(data_iesima);
 
     if (parseInt(mesAux) == parseInt(mesInicial)) {
       numPeticionesMes1++;
@@ -134,7 +138,7 @@ var genReportCUBO = function (records) {
       ? " una actividad en "
       : ` ${numPeticionesMes2} actividades en `;
   bloques
-    .append("\nResumen ")
+    .append("<br/><br/>Resumen ")
     .append("=>")
     .append(numPets1EnLiteral)
     .append(monthList[parseInt(mesInicial) - 1]);
@@ -142,10 +146,14 @@ var genReportCUBO = function (records) {
     .append(" y")
     .append(numPets2EnLiteral)
     .append(monthList[parseInt(mesFinal) - 1]);
-  bloques.append("\n");
+  bloques.append("<br/>");
+
+  //console.log(bloques.toString());
+
+  console.log("stringfy: " + JSON.stringify(historiaProyectos));
 
   //letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
-  return bloques.toString();
+  return historiaProyectos; //JSON.stringify(historiaProyectos);//bloques.toString();
 };
 
 var queryCertifMensualAT = function (arr) {
