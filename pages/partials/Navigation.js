@@ -101,7 +101,8 @@ const Menu = () => {
               <li class="nav-item">
                 <Link
                   href={{
-                    pathname: "/Discover",
+                    // pathname: "/Discover", 
+                    pathname: "#",
                     query: { menuentry: "discover" },
                   }}
                 >
@@ -114,7 +115,8 @@ const Menu = () => {
               <li class="nav-item">
                 <Link
                   href={{
-                    pathname: "/UploadForm",
+                    //pathname: "/UploadForm",
+                    pathname: "#",
                     query: { menuentry: "upload" },
                   }}
                 >
@@ -139,7 +141,7 @@ const Menu = () => {
                   <li>
                     <Link
                       href={{
-                        pathname: "/Gedeones",
+                        pathname: "#",
                         query: { menuentry: "gedeones" },
                       }}
                     >
@@ -149,7 +151,7 @@ const Menu = () => {
                     </Link>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="/Acciona">
+                    <a class="dropdown-item" href="#">
                       Consultar Acciones Bolsa
                     </a>
                   </li>
@@ -157,7 +159,7 @@ const Menu = () => {
                     <hr class="dropdown-divider" />
                   </li>
                   <li>
-                    <a class="dropdown-item" href="/Fom2">
+                    <a class="dropdown-item" href="#">
                       Seguimiento Proyecto FOM2
                     </a>
                   </li>
