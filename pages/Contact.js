@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import Components from "./partials/Components";
 import Navmenu from "./partials/Navigation";
+import Footer from "./partials/Footer";
 import styles from "../styles/Home.module.css";
 
 const Contact = (req, res) => {
   const router = useRouter();
   const { menuentry } = router.query;
-  if (req.method === "POST") {//como recoger parámetros qeu vengan en el body en lugar de la url, de la request
+  if (req.method === "POST") {
+    //como recoger parámetros qeu vengan en el body en lugar de la url, de la request
     console.log("method passed is POST");
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
@@ -31,16 +33,7 @@ const Contact = (req, res) => {
       <main className={styles.main}>
         <p>Menuentry param passed: {menuentry}</p>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://pdulcesite.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Mi site en WWW
-        </a>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 };

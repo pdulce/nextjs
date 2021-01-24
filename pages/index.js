@@ -1,6 +1,7 @@
-import Components from "./partials/Components";
-import Navmenu from "./partials/Navigation";
-import styles from "../styles/Home.module.css";
+import Components from "./partials/Components"
+import Navmenu from "./partials/Navigation"
+import styles from "../styles/Home.module.css"
+import Footer from "./partials/Footer"
 
 export default function Home() {
   return (
@@ -17,7 +18,8 @@ export default function Home() {
           Bienvenido a mi site de aprendizaje de Next.js
         </h3>
         <h4>
-          Este proyecto se va a ir alimentando de la rama <i>local-academy</i> de mi &nbsp;
+          Este proyecto se va a ir alimentando de la rama <i>local-academy</i>{" "}
+          de mi &nbsp;
           <a href="https://github.com/pdulce/nextjs">git account repo</a>
         </h4>
         <div className={styles.grid}>
@@ -27,32 +29,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://pdulcesite.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Mi site en WWW
-        </a>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 }
-
-<style jsx>
-  {`
-    .button {
-      background-color: #4caf50;
-      width: 100%;
-      color: orange;
-      padding: 16px;
-      margin: 10px 0px;
-      border: none;
-      cursor: pointer;
-    }
-    .form {
-      border: 3px solid #f1f1f1;
-    }
-  `}
-</style>;

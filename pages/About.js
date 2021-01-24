@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Components from "./partials/Components";
 import Navmenu from "./partials/Navigation";
+import Footer from "./partials/Footer";
 import styles from "../styles/Home.module.css";
 
 const About = () => {
@@ -18,17 +19,9 @@ const About = () => {
       <main className={styles.main}>
         <p>Menuentry param passed: {menuentry}</p>
         <p>another param passed: {another} </p>
+        Acerca de mí: ver CV actualizado enero'21
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://pdulcesite.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Mi site en WWW
-        </a>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 };

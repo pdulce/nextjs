@@ -3,11 +3,14 @@ import { useRouter } from "next/router";
 
 const Menu = () => {
   const router = useRouter();
+
+  //console.log(router)
+  //console.log(router.route == '/')
   const { menuentry } = router.query;
 
-  var class_menu_entry_home = "nav-link";
-  if (menuentry == "home") {
-    class_menu_entry_home = "nav-link active";
+  var class_menu_entry_home = "nav-link active";
+  if (router.route != '/' && menuentry != "home") {
+    class_menu_entry_home = "nav-link";
   }
   var class_menu_entry_about = "nav-link";
   if (menuentry == "about") {
@@ -103,8 +106,7 @@ const Menu = () => {
                   }}
                 >
                   <a class={class_menu_entry_discover}>
-                    <i class="fas fa-satellite-dish"></i>&nbsp;Investment world
-                    research
+                    <i class="fas fa-satellite-dish"></i>&nbsp;World histories research
                   </a>
                 </Link>
               </li>
