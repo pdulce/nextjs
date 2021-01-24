@@ -8,10 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@angular/common": "^8.2.0",
-    "@angular/core": "^8.2.0",
-    "@material-ui/core": "^4.11.2",
-    "@material-ui/icons": "^4.11.2",
     "@tensorflow-models/mobilenet": "^2.0.4",
     "@tensorflow/tfjs": "^2.8.3",
     "@tensorflow/tfjs-node": "^2.8.3",
@@ -19,9 +15,7 @@
     "aws-sdk": "^2.831.0",
     "bootstrap": "^5.0.0-beta1",
     "cheerio": "^1.0.0-rc.5",
-    "convert-excel-to-json": "^1.7.0",
     "ejs": "^3.1.5",
-    "excel-to-json-with-template": "^0.1.1",
     "express": "^4.17.1",
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
@@ -29,7 +23,6 @@
     "jpeg-js": "^0.4.3",
     "json-to-table": "^4.2.1",
     "moment": "^2.29.1",
-    "morgan": "^1.10.0",
     "next": "10.0.0",
     "node-fetch": "^2.6.1",
     "pdf-text-extract": "^1.5.0",
@@ -38,14 +31,8 @@
     "react-dom": "^17.0.1",
     "request": "^2.88.2",
     "request-progress": "^3.0.0",
-    "rxjs": "^6.6.3",
-    "secure-convert-excel-to-json": "^1.7.0",
     "sqlite3": "^5.0.1",
     "stringbuffer": "^1.0.0",
-    "translate-google": "^1.4.3",
-    "tslib": "^2.0.3",
-    "xlsx": "^0.16.9",
-    "zone": "^0.3.4",
-    "zone.js": "^0.9.1"
+    "translate-google": "^1.4.3"
   }
 }
