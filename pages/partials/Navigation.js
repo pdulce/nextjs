@@ -102,7 +102,7 @@ const Menu = () => {
                 <Link
                   href={{
                     // pathname: "/Discover", 
-                    pathname: "#",
+                    pathname: "/About",
                     query: { menuentry: "discover" },
                   }}
                 >
@@ -116,7 +116,7 @@ const Menu = () => {
                 <Link
                   href={{
                     //pathname: "/UploadForm",
-                    pathname: "#",
+                    pathname: "/About",
                     query: { menuentry: "upload" },
                   }}
                 >
@@ -145,13 +145,13 @@ const Menu = () => {
                         query: { menuentry: "gedeones" },
                       }}
                     >
-                      <a class="dropdown-item" href="/Gedeones">
+                      <a class="dropdown-item" href="/About">
                         Consultar Gedeones
                       </a>
                     </Link>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="/About">
                       Consultar Acciones Bolsa
                     </a>
                   </li>
@@ -159,7 +159,7 @@ const Menu = () => {
                     <hr class="dropdown-divider" />
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="/About">
                       Seguimiento Proyecto FOM2
                     </a>
                   </li>
