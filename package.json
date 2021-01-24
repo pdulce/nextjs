@@ -8,7 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "jpeg-js": "^0.4.3",
     "moment": "^2.29.1",
     "next": "^10.0.5",
     "quickchart-js": "^1.0.5",
