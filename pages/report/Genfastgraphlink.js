@@ -1,10 +1,10 @@
 const QuickChart = require("quickchart-js")
-import Components from "./partials/Components"
-import Navmenu from "./partials/Navigation"
-import Footer from "./partials/Footer"
-import styles from "../styles/Home.module.css"
+import Components from "../partials/Components"
+import Navmenu from "../partials/Navigation"
+import Footer from "../partials/Footer"
+import styles from "../../styles/Home.module.css"
 
-const moduleReporter = require("./api/reportutils")
+const moduleReporter = require("../api/reportutils")
 
 /****en esta funcion haz todo el cómputo en el servidor, para dejarlo disponible en el return () que pinta el html-componente-page */
 export async function getStaticProps({ params }) {

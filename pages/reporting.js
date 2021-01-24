@@ -5,37 +5,11 @@ import Footer from "./partials/Footer";
 import styles from "../styles/Home.module.css";
 // import Interaction from "../next-form/Interaction";
 
-//const moduleReporter = require('./api/reportutils')
-
 const Reporting = () => {
   const title = "Informes del contrato CDISM";
 
   const router = useRouter();
   console.log(router);
-  //if (req.method === "POST") {
-  //como recoger parámetros qeu vengan en el body en lugar de la url, de la request
-  /*console.log("method passed is POST");
-    res.statusCode = 200;
-    const { tipoinforme } = router.body;
-    console.log(router);
-
-    if (tipoinforme == "genCUBO") {
-      console.log(tipoinforme);
-      var data = [];*/
-  //let records = await moduleReporter.queryReportCUBO(data);
-  //let bloques = moduleReporter.genReportCUBO(records);
-  //res.setHeader("Content-Type", "text/plain; charset=UTF-8");
-  //res.write(bloques);
-  //res.end();
-  /*return (
-            <div></div>
-        )*/
-  //}
-  //} else {
-  // Handle any other HTTP method
-  //  console.log(
-  //  "*** LLEga el mgetodo " +   req.method );
-  // }
 
   return (
     <div className={styles.container}>
@@ -59,21 +33,21 @@ const Reporting = () => {
               <h6> &nbsp;Informe Peticiones que finalizan en x días</h6>
             </div>
             <div class="col-sm-2">
-              {/* <Interaction action="/Reporting" method="POST"> */}
-              <form name="cubo" action="/Reporting" method="POST">
+              <form
+                name="cubo"
+                action="/report/GenCUBO?menuentry=reporting"
+                method="POST"
+              >
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>
                 </button>
-                <input
-                  type="hidden"
-                  name="tipoinforme"
-                  defaultValue="genCUBO"
-                />
               </form>
-              {/* </Interaction> */}
 
               <br />
-              <form action="/Reporting" method="POST">
+              <form
+                action="/report/GenCaducan?menuentry=reporting"
+                method="POST"
+              >
                 <div class="mb-3">
                   <label for="diasfin" class="form-label">
                     Max. días para finalización
@@ -89,11 +63,6 @@ const Reporting = () => {
                   <div id="diasfinHelp" class="form-text">
                     Establezca el núm. x de días
                   </div>
-                  <input
-                    type="hidden"
-                    name="tipoinforme"
-                    defaultValue="caducanSoon"
-                  />
                 </div>
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>
@@ -111,18 +80,20 @@ const Reporting = () => {
               <h6> &nbsp;Informe Actividades para PPTX Seguimiento</h6>
             </div>
             <div class="col-sm-2">
-              <form action="/Reporting" method="POST">
-                <input
-                  type="hidden"
-                  name="tipoinforme"
-                  defaultValue="genCertMensualAT"
-                />
+              <form
+                action="/report/GenCertMensualAT?menuentry=reporting"
+                method="POST"
+              >
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>
                 </button>
               </form>
               <br />
-              <form name="pptx" action="/Reporting" method="POST">
+              <form
+                name="pptx"
+                action="/report/GenPPTXComite?menuentry=reporting"
+                method="POST"
+              >
                 <div class="mb-6">
                   <label for="fecultimoComite" class="form-label">
                     Fecha último Comité Seguimiento
@@ -137,11 +108,6 @@ const Reporting = () => {
                     aria-describedby="fecultimoComiteHelp"
                     readOnly
                   />
-                  <input
-                    type="hidden"
-                    name="tipoinforme"
-                    defaultValue="informePPTX"
-                  />
                   <div id="fecultimoComiteHelp" class="form-text">
                     formato <i>yyyy-mm-dd</i>
                   </div>
@@ -155,7 +121,11 @@ const Reporting = () => {
                   <i class="fab fa-youtube fa-2x"></i>
                 </button>
               </form>
-              <form name="pptx" action="/Genfastgraphlink" method="POST">
+              <form
+                name="pptx"
+                action="/report/Genfastgraphlink?menuentry=reporting"
+                method="POST"
+              >
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>Gráfico a medida con
                   quickReport
