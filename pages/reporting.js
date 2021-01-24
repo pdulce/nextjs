@@ -4,7 +4,7 @@ import Navmenu from "./partials/Navigation";
 import Footer from "./partials/Footer";
 import styles from "../styles/Home.module.css";
 
-const Reporting = () => {
+const reporting = () => {
   const title = "Informes del contrato CDISM";
 
   const router = useRouter();
@@ -140,4 +140,4 @@ const Reporting = () => {
   );
 };
 
-export default Reporting;
+export default reporting;
