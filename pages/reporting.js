@@ -1,21 +1,20 @@
-import { useRouter } from "next/router"
-import Components from "./partials/Components"
-import Navmenu from "./partials/Navigation"
-import Navmenu from "./partials/Footer"
-import styles from "../styles/Home.module.css"
+import { useRouter } from "next/router";
+import Components from "./partials/Components";
+import Navmenu from "./partials/Navigation";
+import Footer from "./partials/Footer";
+import styles from "../styles/Home.module.css";
 // import Interaction from "../next-form/Interaction";
 
-
-//const moduleReporter = require('./api/reporting')
+//const moduleReporter = require('./api/reportutils')
 
 const Reporting = () => {
   const title = "Informes del contrato CDISM";
 
   const router = useRouter();
-    console.log(router)
+  console.log(router);
   //if (req.method === "POST") {
-    //como recoger parámetros qeu vengan en el body en lugar de la url, de la request
-    /*console.log("method passed is POST");
+  //como recoger parámetros qeu vengan en el body en lugar de la url, de la request
+  /*console.log("method passed is POST");
     res.statusCode = 200;
     const { tipoinforme } = router.body;
     console.log(router);
@@ -23,20 +22,20 @@ const Reporting = () => {
     if (tipoinforme == "genCUBO") {
       console.log(tipoinforme);
       var data = [];*/
-      //let records = await moduleReporter.queryReportCUBO(data);
-      //let bloques = moduleReporter.genReportCUBO(records);
-      //res.setHeader("Content-Type", "text/plain; charset=UTF-8");
-      //res.write(bloques);
-      //res.end();
-      /*return (
+  //let records = await moduleReporter.queryReportCUBO(data);
+  //let bloques = moduleReporter.genReportCUBO(records);
+  //res.setHeader("Content-Type", "text/plain; charset=UTF-8");
+  //res.write(bloques);
+  //res.end();
+  /*return (
             <div></div>
         )*/
-    //}
+  //}
   //} else {
-    // Handle any other HTTP method
+  // Handle any other HTTP method
   //  console.log(
-    //  "*** LLEga el mgetodo " +   req.method );
- // }
+  //  "*** LLEga el mgetodo " +   req.method );
+  // }
 
   return (
     <div className={styles.container}>
@@ -51,22 +50,26 @@ const Reporting = () => {
           <div class="row bg-dark text-white p-5 text-center">
             <div class="col-sm-3 vertical-center">
               <br />
-              <h5> &nbsp;Informe bimensual Métrica CUBO (Babel)</h5>
+              <h6> &nbsp;Informe bimensual Métrica CUBO (Babel)</h6>
               <br />
               <hr />
               <br />
               <br />
               <br />
-              <h5> &nbsp;Informe Peticiones que finalizan en x días</h5>
+              <h6> &nbsp;Informe Peticiones que finalizan en x días</h6>
             </div>
             <div class="col-sm-2">
               {/* <Interaction action="/Reporting" method="POST"> */}
-                <form name="cubo" action="/Reporting" method="POST">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fab fa-youtube fa-2x"></i>
-                  </button>
-                  <input type="hidden" name="tipoinforme" defaultValue="genCUBO" />
-                </form>
+              <form name="cubo" action="/Reporting" method="POST">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fab fa-youtube fa-2x"></i>
+                </button>
+                <input
+                  type="hidden"
+                  name="tipoinforme"
+                  defaultValue="genCUBO"
+                />
+              </form>
               {/* </Interaction> */}
 
               <br />
@@ -86,7 +89,11 @@ const Reporting = () => {
                   <div id="diasfinHelp" class="form-text">
                     Establezca el núm. x de días
                   </div>
-                  <input type="hidden" name="tipoinforme" defaultValue="caducanSoon" />
+                  <input
+                    type="hidden"
+                    name="tipoinforme"
+                    defaultValue="caducanSoon"
+                  />
                 </div>
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>
@@ -95,13 +102,13 @@ const Reporting = () => {
             </div>
             <div class="col-sm-3">
               <br />
-              <h5> &nbsp;Informe Mensual UTE Actividades AT</h5>
+              <h6> &nbsp;Informe Mensual UTE Actividades AT</h6>
               <br />
               <hr />
               <br />
               <br />
               <br />
-              <h5> &nbsp;Informe Actividades para PPTX Seguimiento</h5>
+              <h6> &nbsp;Informe Actividades para PPTX Seguimiento</h6>
             </div>
             <div class="col-sm-2">
               <form action="/Reporting" method="POST">
@@ -130,7 +137,11 @@ const Reporting = () => {
                     aria-describedby="fecultimoComiteHelp"
                     readOnly
                   />
-                  <input type="hidden" name="tipoinforme" defaultValue="informePPTX" />
+                  <input
+                    type="hidden"
+                    name="tipoinforme"
+                    defaultValue="informePPTX"
+                  />
                   <div id="fecultimoComiteHelp" class="form-text">
                     formato <i>yyyy-mm-dd</i>
                   </div>
@@ -143,11 +154,9 @@ const Reporting = () => {
                 <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>
                 </button>
-                <button
-                  onClick="javascript:document.getElementsByName('pptx')[0].action='/Genfastgraphlink';"
-                  type="submit"
-                  class="btn btn-primary"
-                >
+              </form>
+              <form name="pptx" action="/Genfastgraphlink" method="POST">
+                <button type="submit" class="btn btn-primary">
                   <i class="fab fa-youtube fa-2x"></i>Gráfico a medida con
                   quickReport
                 </button>
@@ -157,9 +166,9 @@ const Reporting = () => {
         </section>
       </main>
 
-     </div>
+      <Footer></Footer>
+    </div>
   );
-                                
-}                        
+};
 
-export default Reporting
+export default Reporting;

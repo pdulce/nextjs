@@ -20,10 +20,10 @@ export default function Home() {
         <h4>
           Este proyecto se va a ir alimentando de la rama <i>local-academy</i>{" "}
           de mi &nbsp;
-          <a href="https://github.com/pdulce/nextjs">git account repo</a>
+          <a target="_blank" href="https://github.com/pdulce/nextjs">git account repo</a>
         </h4>
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
+          <a target="_blank" href="https://nextjs.org/docs" className={styles.card}>
             <p>Adéntrate en el mundo de Nextjs a través de su documentación.</p>
           </a>
         </div>

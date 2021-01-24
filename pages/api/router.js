@@ -27,7 +27,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.render("home.html", {title: 'Bienvenido a Home!', entry: '1'});
+  res.render("home.html", {title: 'Bienvenido a Home!', entry: 1});
 });
 
 router.get("/home", (req, res) => {
