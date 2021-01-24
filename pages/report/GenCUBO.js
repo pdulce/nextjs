@@ -41,9 +41,9 @@ const GenCUBO = (props) => {
         <p><h5>{props.resumen}</h5></p>
 
         <ul>
-          {props.bloques.map(({ code, desc }) => (
+          {props.bloques.map(({ project, mes, code, desc }) => (
             <li key={code}>
-              {desc} : {desc}
+              {project} -- {mes} : {code} : {desc}
             </li>
           ))}
         </ul>

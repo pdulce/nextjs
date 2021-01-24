@@ -50,7 +50,7 @@ var queryReportCUBO = function (arr) {
 }; //end of genReportCUBO
 
 var genReportCUBO = function (records, mesInicial, mesFinal) {
-  var bloques = new StringBuffer();
+  
   var proyectoAux = "",
     mesAux = "";
   var numPeticionesMes1 = 0,
@@ -66,53 +66,21 @@ var genReportCUBO = function (records, mesInicial, mesFinal) {
     var descGedeon_ = splitter_[3];
 
     if (proyectoAux == "" || proyecto_ != proyectoAux) {
-      if (proyectoAux != "") {
-        var numPets1EnLiteral =
-          numPeticionesMes1 == 0
-            ? " ninguna actividad en "
-            : numPeticionesMes1 == 1
-            ? " una actividad en "
-            : ` ${numPeticionesMes1} actividades en `;
-        var numPets2EnLiteral =
-          numPeticionesMes2 == 0
-            ? " ninguna actividad en "
-            : numPeticionesMes2 == 1
-            ? " una actividad en "
-            : ` ${numPeticionesMes2} actividades en `;
-        let resumen =
-          " Resumen =>" +
-          numPets1EnLiteral +
-          monthList[parseInt(mesInicial) - 1] +
-          " y" +
-          numPets2EnLiteral +
-          monthList[parseInt(mesFinal) - 1];
-        bloques.append(resumen);
-      }
       numPeticionesMes1 = 0;
       numPeticionesMes2 = 0;
       proyectoAux = proyecto_;
       mesAux = mes_;
 
-      //historiaProyectos['item'] = [];
-
-      bloques.append("<br/><br/>");
-      bloques.append(proyectoAux);
-      bloques.append("<br/><br/>");
-      bloques.append(monthList[parseInt(mesAux) - 1]);
-      bloques.append("<br/>");
     }
 
     //llenamos el bloque actual
     if (mes_ != mesAux) {
       mesAux = mes_;
-      bloques.append("<br/>");
-      bloques.append(monthList[parseInt(mesAux) - 1]);
-      bloques.append("<br/>");
     }
-    bloques.append("-  ").append(codGedeon_).append(" - ").append(descGedeon_);
 
     var data_iesima = {
       project: proyectoAux,
+      mes: monthList[parseInt(mesAux)-1],
       code: codGedeon_,
       desc: descGedeon_,
     };
@@ -125,35 +93,9 @@ var genReportCUBO = function (records, mesInicial, mesFinal) {
     }
   } //for
 
-  var numPets1EnLiteral =
-    numPeticionesMes1 == 0
-      ? " ninguna actividad en "
-      : numPeticionesMes1 == 1
-      ? " una actividad en "
-      : ` ${numPeticionesMes1} actividades en `;
-  var numPets2EnLiteral =
-    numPeticionesMes2 == 0
-      ? " ninguna actividad en "
-      : numPeticionesMes2 == 1
-      ? " una actividad en "
-      : ` ${numPeticionesMes2} actividades en `;
-  bloques
-    .append("<br/><br/>Resumen ")
-    .append("=>")
-    .append(numPets1EnLiteral)
-    .append(monthList[parseInt(mesInicial) - 1]);
-  bloques
-    .append(" y")
-    .append(numPets2EnLiteral)
-    .append(monthList[parseInt(mesFinal) - 1]);
-  bloques.append("<br/>");
+  //console.log("stringfy: " + JSON.stringify(historiaProyectos));
 
-  //console.log(bloques.toString());
-
-  console.log("stringfy: " + JSON.stringify(historiaProyectos));
-
-  //letra del informe: Trebuchet MS 9 (negrita para proyecto y mes)
-  return historiaProyectos; //JSON.stringify(historiaProyectos);//bloques.toString();
+  return historiaProyectos; 
 };
 
 var queryCertifMensualAT = function (arr) {
