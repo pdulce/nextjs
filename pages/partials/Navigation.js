@@ -141,7 +141,7 @@ const Menu = () => {
                   <li>
                     <Link
                       href={{
-                        pathname: "#",
+                        pathname: "/About",
                         query: { menuentry: "gedeones" },
                       }}
                     >
