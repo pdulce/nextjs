@@ -89,7 +89,7 @@ const Menu = () => {
               <li class="nav-item">
                 <Link
                   href={{
-                    pathname: "/Reporting",
+                    pathname: "/reporting",
                     query: { menuentry: "reporting" },
                   }}
                 >

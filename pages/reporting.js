@@ -3,7 +3,6 @@ import Components from "./partials/Components";
 import Navmenu from "./partials/Navigation";
 import Footer from "./partials/Footer";
 import styles from "../styles/Home.module.css";
-// import Interaction from "../next-form/Interaction";
 
 const Reporting = () => {
   const title = "Informes del contrato CDISM";
@@ -14,7 +13,7 @@ const Reporting = () => {
   return (
     <div className={styles.container}>
       <Components>
-        <title>Site academy</title>
+        <title>Site academy for learning purposes</title>
         <link rel="icon" href="/favicon.ico" />
       </Components>
       <Navmenu></Navmenu>
