@@ -106,7 +106,7 @@ var queryCertifMensualAT = function (arr) {
       "(i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Estructurado'  OR i99.Area_destino LIKE '7201 17G L2 ISM ATH Análisis Orientado a Objecto') OR "+
       "(i99.Tipo LIKE '%Entrega%' AND i99.Area_destino LIKE 'Desarrollo Gestionado%')"+
     ")"+
-    "AND i99.Proyecto_ID IN ('FMAR', 'FOMA', 'SANI', 'FAM2', 'FAMA', 'FRMA', 'FOM2', 'WSRT', 'WISM', 'WBOF')"+
+    "AND i99.Proyecto_ID IN ('FOMA', 'SANI', 'FAM2', 'FAMA', 'FRMA', 'FOM2', 'WSRT', 'WISM', 'WBOF')"+
     "ORDER BY i99.Proyecto_ID, i99.fecha_estado_modif asc";
   return new Promise((resolve,reject)=>{
     db.all(myQuery, (err, rows) => {
@@ -138,7 +138,7 @@ var genCertifMensualAT = function (records, mesCertificado){
     var proyecto_ = splitter_[0];
     var codGedeon_ = splitter_[1];
     var descGedeon_ = splitter_[2];
-    var fechatram = splitter_[3];
+    //var fechatram = splitter_[3];
     if (proyectoAux == '' || proyecto_ != proyectoAux){
       numPeticionesMes = 0;
       proyectoAux = proyecto_;
@@ -149,7 +149,8 @@ var genCertifMensualAT = function (records, mesCertificado){
     }
     
     //llenamos el bloque actual
-    bloques.append("-  ").append(fechatram).append(codGedeon_).append(" - ").append(descGedeon_);
+    bloques.append("-  ").//append(fechatram).
+    append(codGedeon_).append(" - ").append(descGedeon_);
     bloques.append("\n"); 
     numPeticionesMes++;
   }//for 

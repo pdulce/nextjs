@@ -15,7 +15,7 @@ app.use(bodyparser.urlencoded({extended:false}))
 
 //server port definition: nuevos comentarios
 app.listen(app.get("port"), (req, res) => {
-  console.log("...Server started, listening at port " + app.get("port"));
+  console.log("...Server started with express, listening at port " + app.get("port"));
 });
 
 // routes
