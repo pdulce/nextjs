@@ -13,7 +13,7 @@ require('moment/locale/cs')
 //begin of definition of my own modules
 const moduleReporter = require('../utils/reporting')
 const discoverWTF = require('../utils/discovery')
-const regressionModel = require('../utils/ml')
+const regressionModel = require('../utils/mlCarteraOptima')
 //const StringBuffer = require("stringbuffer")
 //end of definition of my own modules
 

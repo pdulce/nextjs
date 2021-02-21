@@ -1,7 +1,7 @@
 const jsregression = require("js-regression");
 
 const makeModel = async function () {
-  // === training data generated from y = 2.0 + 5.0 * x + 2.0 * x^2 === //
+  // === training data generated from y = 1.0 + 2.0*x1  + 3.0*x2 === //
   var data = [];
   for (var x1 = 1.0; x1 < 10.0; x1 += 1.0) {
     for (var x2 = 1.0; x2 < 10.0; x2 += 1.0) {
@@ -15,7 +15,7 @@ const makeModel = async function () {
   // === Create the linear regression === //
   var regression = new jsregression.LinearRegression({
     alpha: 0.001, //
-    iterations: 300,
+    iterations: 3000,
     lambda: 0.0,
   });
   // can also use default configuration: var regression = new jsregression.LinearRegression();
@@ -31,7 +31,7 @@ const makeModel = async function () {
     for (var x2 = 1.0; x2 < 10.0; x2 += 1.0) {
         var actual_y = 1.0 + 2.0*x1  + 3.0*x2;
         var predicted_y = regression.transform([x1, x2]);
-        console.log("actual: " + actual_y + " predicted: " + predicted_y);
+        console.log("actual: " + actual_y + " predicted: " + ((predicted_y + 0.5)|0));
         
     }
   }
