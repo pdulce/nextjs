@@ -13,6 +13,7 @@ require('moment/locale/cs')
 //begin of definition of my own modules
 const moduleReporter = require('../utils/reporting')
 const discoverWTF = require('../utils/discovery')
+const regressionModel = require('../utils/ml')
 //const StringBuffer = require("stringbuffer")
 //end of definition of my own modules
 
@@ -26,6 +27,14 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 
 router.get("/", (req, res) => {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.render("home.html", {title: 'Bienvenido a Home!', entry: '1'});
+});
+
+router.post("/regressionModel", async (req, res) => {
+
+  let a = await regressionModel.makeModel();
+  console.log("regression returned: " + a);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.render("home.html", {title: 'Bienvenido a Home!', entry: '1'});
 });
@@ -97,6 +106,7 @@ router.post("/genCUBO", async (req, res) => {
   res.write(bloques);
   res.end();
 });
+
 
 router.post("/genCertMensualAT", async (req, res) => {
   
